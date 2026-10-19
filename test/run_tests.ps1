@@ -94,6 +94,9 @@ Write-Host "      WAREHOUSE MANAGEMENT SYSTEM (WMS) - COMPREHENSIVE TEST SUITE  
 Write-Host "      Testing SCRUM-8, SCRUM-9, SCRUM-10, SCRUM-11 Execution          " -ForegroundColor Cyan
 Write-Host "======================================================================" -ForegroundColor Cyan
 
+# Clean up transient test SKUs (PRD-%) before test execution
+& "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe" -u wms_user -pwms_pass_CHANGE_ME -e "USE wms_db; DELETE FROM products WHERE product_id LIKE 'PRD-%';" 2>&1 | Out-Null
+
 # ----------------- MODULE 1: PRODUCT MANAGEMENT (SCRUM-8) -----------------
 Write-Host "`n>>> [SCRUM-8] Product Creation and Listing Tests" -ForegroundColor Yellow
 

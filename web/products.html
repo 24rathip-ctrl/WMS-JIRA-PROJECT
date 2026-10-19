@@ -11,6 +11,7 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
+    <!-- Unified Application Navigation Header -->
     <header class="app-header">
         <div class="nav-container">
             <a href="index.html" class="brand" aria-label="Warehouse Management System Home">
@@ -20,14 +21,27 @@
             <nav class="main-nav" aria-label="Primary Navigation">
                 <ul>
                     <li><a href="index.html">Dashboard</a></li>
-                    <li><a href="products.html" class="active" aria-current="page">Products</a></li>
-                    <li><a href="inventory.html">Inventory</a></li>
+                    <li><a href="products.html" class="active" aria-current="page">Product Management</a></li>
+                    <li><a href="inventory.html">Inventory Management</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main id="main-content" class="main-content">
+        <!-- Subnav / Breadcrumb & Cross-Link Bar -->
+        <div class="subnav-bar">
+            <div class="breadcrumb" aria-label="Breadcrumbs">
+                <a href="index.html">&larr; Dashboard</a>
+                <span class="sep">/</span>
+                <span class="current">Product Management</span>
+            </div>
+            <div class="subnav-links" aria-label="Module Quick Links">
+                <a href="index.html">&larr; Back to Dashboard</a>
+                <a href="inventory.html" class="active-link">Switch to Inventory Management &rarr;</a>
+            </div>
+        </div>
+
         <div class="page-header">
             <h1>Product Management</h1>
             <p><span class="jira-pill">SCRUM-8</span> Product creation &amp; cataloging &bull; <span class="jira-pill">SCRUM-9</span> Product details update</p>
@@ -183,7 +197,7 @@
     </div>
 
     <footer class="app-footer">
-        <p>Warehouse Management System &bull; Software Engineering Practical Project</p>
+        <p>Warehouse Management System &bull; Unified Web Application built with HTML, CSS, Vanilla JS, Java Servlets, JDBC, MySQL, and Apache Tomcat</p>
     </footer>
 
     <script src="js/products.js"></script>

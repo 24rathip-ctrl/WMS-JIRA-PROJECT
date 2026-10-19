@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Simple, professional Warehouse Management System for Software Engineering practical.">
+    <meta name="description" content="Unified Warehouse Management System for Software Engineering practical.">
     <title>Warehouse Management System — Dashboard</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="css/styles.css">
@@ -11,6 +11,7 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
+    <!-- Unified Application Navigation Header -->
     <header class="app-header">
         <div class="nav-container">
             <a href="index.html" class="brand" aria-label="Warehouse Management System Home">
@@ -20,17 +21,30 @@
             <nav class="main-nav" aria-label="Primary Navigation">
                 <ul>
                     <li><a href="index.html" class="active" aria-current="page">Dashboard</a></li>
-                    <li><a href="products.html">Products</a></li>
-                    <li><a href="inventory.html">Inventory</a></li>
+                    <li><a href="products.html">Product Management</a></li>
+                    <li><a href="inventory.html">Inventory Management</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main id="main-content" class="main-content">
+        <!-- Subnav / Breadcrumb Bar -->
+        <div class="subnav-bar">
+            <div class="breadcrumb" aria-label="Breadcrumbs">
+                <span>WMS</span>
+                <span class="sep">/</span>
+                <span class="current">Dashboard (Home)</span>
+            </div>
+            <div class="subnav-links" aria-label="Quick Actions">
+                <a href="products.html">Manage Products &rarr;</a>
+                <a href="inventory.html">Manage Inventory &rarr;</a>
+            </div>
+        </div>
+
         <div class="page-header">
             <h1>Warehouse Operations Dashboard</h1>
-            <p>Welcome to the Warehouse Management System. Monitor product catalogs, track stock counts, and execute inward/outward inventory movements.</p>
+            <p>Unified operational overview of your warehouse catalog and inventory stock levels.</p>
         </div>
 
         <!-- Real-Time Metrics -->
@@ -43,7 +57,7 @@
             <div class="stat-card">
                 <div class="stat-card-title">Total Units in Stock</div>
                 <div class="stat-card-value" id="stat-stock">--</div>
-                <div class="stat-card-desc">Aggregated quantity across all items</div>
+                <div class="stat-card-desc">Aggregated inventory across all items</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-title">Low Stock Items</div>
@@ -53,16 +67,16 @@
         </section>
 
         <!-- Navigation Cards for Primary Workflows -->
-        <section aria-label="Quick Access Modules">
+        <section aria-label="Unified Workflows">
             <div class="nav-card-grid">
                 <article class="nav-card">
                     <div>
                         <span class="jira-pill">SCRUM-8 &amp; SCRUM-9</span>
                         <h2>Product Management</h2>
-                        <p>Create new warehouse product entries, maintain catalog attributes (ID, name, category, unit price, description), and update existing records.</p>
+                        <p>Register new warehouse product catalog entries, configure classifications, set unit prices in Indian Rupees (₹), and modify existing product details.</p>
                     </div>
                     <div class="nav-card-footer">
-                        <a href="products.html" class="btn btn-primary">Manage Products &rarr;</a>
+                        <a href="products.html" class="btn btn-primary">Open Product Management &rarr;</a>
                     </div>
                 </article>
 
@@ -70,17 +84,49 @@
                     <div>
                         <span class="jira-pill">SCRUM-10</span>
                         <h2>Inventory Management</h2>
-                        <p>Perform inward receiving (add stock) and outward dispatch (reduce stock). Enforces zero, negative, and non-numeric validation to prevent negative stock.</p>
+                        <p>Process inward receiving (add stock) and outward dispatch (reduce stock). Enforces positive quantity validation and guarantees stock cannot drop below zero.</p>
                     </div>
                     <div class="nav-card-footer">
-                        <a href="inventory.html" class="btn btn-primary">Manage Inventory &rarr;</a>
+                        <a href="inventory.html" class="btn btn-primary">Open Inventory Management &rarr;</a>
                     </div>
                 </article>
             </div>
         </section>
 
+        <!-- Live Inventory Snapshot Table -->
+        <section class="panel" style="margin-top: 32px;" aria-labelledby="snapshot-heading">
+            <div class="panel-header">
+                <h2 id="snapshot-heading">Live Warehouse Stock Snapshot</h2>
+                <div style="display: flex; gap: 8px;">
+                    <a href="products.html" class="btn btn-secondary btn-sm">+ Add New Product</a>
+                    <a href="inventory.html" class="btn btn-primary btn-sm">&plusmn; Adjust Stock</a>
+                </div>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <div class="table-responsive">
+                    <table class="data-table" id="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product ID</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Category</th>
+                                <th scope="col" class="numeric">Unit Price (₹)</th>
+                                <th scope="col" class="numeric">Current Stock</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-tbody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--color-text-muted); padding: 24px;">Loading live warehouse data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
         <!-- System Architecture & Verification Info for Faculty Viva -->
-        <section class="panel" style="margin-top: 32px;" aria-label="Project Verification Information">
+        <section class="panel" style="margin-top: 24px;" aria-label="Project Verification Information">
             <div class="panel-header">
                 <h2>Project Information &amp; Architecture (Viva Quick Reference)</h2>
             </div>
@@ -110,12 +156,27 @@
     </main>
 
     <footer class="app-footer">
-        <p>Warehouse Management System &bull; Built with HTML, CSS, Vanilla JS, Java Servlets, JDBC, MySQL, and Apache Tomcat</p>
+        <p>Warehouse Management System &bull; Unified Web Application built with HTML, CSS, Vanilla JS, Java Servlets, JDBC, MySQL, and Apache Tomcat</p>
     </footer>
 
     <script>
-        // Load live dashboard summary metrics
-        (function loadDashboardMetrics() {
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function getStatusBadge(qty) {
+            if (qty <= 0) return '<span class="badge badge-out-of-stock">Out of Stock</span>';
+            if (qty <= 10) return '<span class="badge badge-low-stock">Low Stock (' + qty + ')</span>';
+            return '<span class="badge badge-in-stock">In Stock (' + qty + ')</span>';
+        }
+
+        (function loadDashboard() {
             fetch('api/products')
                 .then(function(res) {
                     if (!res.ok) throw new Error('API returned status ' + res.status);
@@ -127,11 +188,29 @@
                         var totalProducts = products.length;
                         var totalStock = 0;
                         var lowStock = 0;
+                        var tbody = document.getElementById('dashboard-tbody');
+                        tbody.innerHTML = '';
+
+                        if (products.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--color-text-muted);">No products registered yet.</td></tr>';
+                            return;
+                        }
 
                         products.forEach(function(p) {
                             var qty = parseInt(p.quantity, 10) || 0;
                             totalStock += qty;
                             if (qty <= 10) lowStock++;
+
+                            var price = parseFloat(p.unitPrice).toFixed(2);
+                            var tr = document.createElement('tr');
+                            tr.innerHTML =
+                                '<td class="mono"><strong>' + escapeHtml(p.productId) + '</strong></td>' +
+                                '<td>' + escapeHtml(p.name) + '</td>' +
+                                '<td>' + escapeHtml(p.category) + '</td>' +
+                                '<td class="numeric">₹' + escapeHtml(price) + '</td>' +
+                                '<td class="numeric"><strong>' + escapeHtml(qty) + '</strong></td>' +
+                                '<td>' + getStatusBadge(qty) + '</td>';
+                            tbody.appendChild(tr);
                         });
 
                         document.getElementById('stat-products').textContent = totalProducts;

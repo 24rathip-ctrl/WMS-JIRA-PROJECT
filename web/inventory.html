@@ -11,6 +11,7 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
+    <!-- Unified Application Navigation Header -->
     <header class="app-header">
         <div class="nav-container">
             <a href="index.html" class="brand" aria-label="Warehouse Management System Home">
@@ -20,14 +21,27 @@
             <nav class="main-nav" aria-label="Primary Navigation">
                 <ul>
                     <li><a href="index.html">Dashboard</a></li>
-                    <li><a href="products.html">Products</a></li>
-                    <li><a href="inventory.html" class="active" aria-current="page">Inventory</a></li>
+                    <li><a href="products.html">Product Management</a></li>
+                    <li><a href="inventory.html" class="active" aria-current="page">Inventory Management</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main id="main-content" class="main-content">
+        <!-- Subnav / Breadcrumb & Cross-Link Bar -->
+        <div class="subnav-bar">
+            <div class="breadcrumb" aria-label="Breadcrumbs">
+                <a href="index.html">&larr; Dashboard</a>
+                <span class="sep">/</span>
+                <span class="current">Inventory Management</span>
+            </div>
+            <div class="subnav-links" aria-label="Module Quick Links">
+                <a href="index.html">&larr; Back to Dashboard</a>
+                <a href="products.html" class="active-link">Switch to Product Management &rarr;</a>
+            </div>
+        </div>
+
         <div class="page-header">
             <h1>Inventory Management</h1>
             <p><span class="jira-pill">SCRUM-10</span> Inward stock receiving &bull; Outward stock reduction &bull; Negative stock prevention</p>
@@ -161,7 +175,7 @@
     </div>
 
     <footer class="app-footer">
-        <p>Warehouse Management System &bull; Software Engineering Practical Project</p>
+        <p>Warehouse Management System &bull; Unified Web Application built with HTML, CSS, Vanilla JS, Java Servlets, JDBC, MySQL, and Apache Tomcat</p>
     </footer>
 
     <script src="js/inventory.js"></script>
