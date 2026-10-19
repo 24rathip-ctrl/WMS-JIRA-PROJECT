@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Product management module for warehouse cataloging, creation, and updates.">
+    <title>Product Management — Warehouse Management System</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="app-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand" aria-label="Warehouse Management System Home">
+                <span>Warehouse Management System</span>
+                <span class="brand-badge">WMS</span>
+            </a>
+            <nav class="main-nav" aria-label="Primary Navigation">
+                <ul>
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="products.html" class="active" aria-current="page">Products</a></li>
+                    <li><a href="inventory.html">Inventory</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="main-content">
+        <div class="page-header">
+            <h1>Product Management</h1>
+            <p><span class="jira-pill">SCRUM-8</span> Product creation &amp; cataloging &bull; <span class="jira-pill">SCRUM-9</span> Product details update</p>
+        </div>
+
+        <!-- Notification Banner -->
+        <div id="status-banner" class="alert-banner hidden" role="alert" aria-live="polite">
+            <span id="status-message"></span>
+            <button type="button" class="alert-close" aria-label="Dismiss message" onclick="dismissBanner()">&times;</button>
+        </div>
+
+        <!-- Section 1: Add New Product Form -->
+        <section class="panel" aria-labelledby="add-product-heading">
+            <div class="panel-header">
+                <h2 id="add-product-heading">Add New Product (SCRUM-8)</h2>
+            </div>
+            <div class="panel-body">
+                <form id="add-product-form" novalidate>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productId">Product ID <span class="required" aria-hidden="true">*</span></label>
+                            <input type="text" id="productId" name="productId" required placeholder="e.g. PRD-1001" maxlength="20" autocomplete="off">
+                            <span class="form-help">Unique warehouse identifier (alphanumeric, max 20 chars)</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Product Name <span class="required" aria-hidden="true">*</span></label>
+                            <input type="text" id="name" name="name" required placeholder="e.g. Heavy Duty Pallet Jack" maxlength="100">
+                            <span class="form-help">Descriptive product title</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category">Category <span class="required" aria-hidden="true">*</span></label>
+                            <select id="category" name="category" required>
+                                <option value="">-- Select Category --</option>
+                                <option value="Storage &amp; Racks">Storage &amp; Racks</option>
+                                <option value="Material Handling">Material Handling</option>
+                                <option value="Packaging Supplies">Packaging Supplies</option>
+                                <option value="Safety &amp; PPE">Safety &amp; PPE</option>
+                                <option value="Barcode &amp; Scanning">Barcode &amp; Scanning</option>
+                                <option value="Tools &amp; Hardware">Tools &amp; Hardware</option>
+                                <option value="General Inventory">General Inventory</option>
+                            </select>
+                            <span class="form-help">Warehouse department/classification</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="unitPrice">Unit Price ($) <span class="required" aria-hidden="true">*</span></label>
+                            <input type="number" id="unitPrice" name="unitPrice" required step="0.01" min="0.01" placeholder="e.g. 149.50">
+                            <span class="form-help">Cost per unit (must be greater than 0)</span>
+                        </div>
+
+                        <div class="form-group span-full">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" placeholder="Optional specifications, dimensions, or warehouse aisle location..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        <button type="submit" class="btn btn-primary" id="btn-submit-product">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Section 2: Product Catalog Table -->
+        <section class="panel" aria-labelledby="catalog-heading">
+            <div class="panel-header">
+                <h2 id="catalog-heading">Product Catalog</h2>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <label for="search-input" class="visually-hidden" style="display:none;">Search Products</label>
+                    <input type="text" id="search-input" placeholder="Filter by ID, name, or category..." style="width: 260px; font-size: 13px;" oninput="filterProducts()">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="loadProducts()">Refresh</button>
+                </div>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <div class="table-responsive">
+                    <table class="data-table" id="products-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Category</th>
+                                <th scope="col" class="numeric">Unit Price</th>
+                                <th scope="col" class="numeric">Current Stock</th>
+                                <th scope="col">Description</th>
+                                <th scope="col" style="text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-tbody">
+                            <!-- Populated dynamically via vanilla JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="empty-state" class="empty-state hidden">
+                    <div class="empty-state-title">No Products Found</div>
+                    <p>There are no products matching your criteria. Use the form above to register your first warehouse item.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Dialog: Update Existing Product (SCRUM-9) -->
+    <div id="edit-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="edit-modal-heading">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="edit-modal-heading">Update Product Details (SCRUM-9)</h3>
+                <button type="button" class="modal-close" aria-label="Close dialog" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="edit-product-form" novalidate>
+                <div class="modal-body">
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label for="edit-productId">Product ID</label>
+                        <input type="text" id="edit-productId" name="productId" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+                        <span class="form-help">Product ID is immutable (primary key).</span>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label for="edit-name">Product Name <span class="required" aria-hidden="true">*</span></label>
+                        <input type="text" id="edit-name" name="name" required maxlength="100">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label for="edit-category">Category <span class="required" aria-hidden="true">*</span></label>
+                        <select id="edit-category" name="category" required>
+                            <option value="Storage &amp; Racks">Storage &amp; Racks</option>
+                            <option value="Material Handling">Material Handling</option>
+                            <option value="Packaging Supplies">Packaging Supplies</option>
+                            <option value="Safety &amp; PPE">Safety &amp; PPE</option>
+                            <option value="Barcode &amp; Scanning">Barcode &amp; Scanning</option>
+                            <option value="Tools &amp; Hardware">Tools &amp; Hardware</option>
+                            <option value="General Inventory">General Inventory</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label for="edit-unitPrice">Unit Price ($) <span class="required" aria-hidden="true">*</span></label>
+                        <input type="number" id="edit-unitPrice" name="unitPrice" required step="0.01" min="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-description">Description</label>
+                        <textarea id="edit-description" name="description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-edit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <p>Warehouse Management System &bull; Software Engineering Practical Project</p>
+    </footer>
+
+    <script src="js/products.js"></script>
+</body>
+</html>

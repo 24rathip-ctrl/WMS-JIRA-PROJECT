@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simple, professional Warehouse Management System for Software Engineering practical.">
+    <title>Warehouse Management System — Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="app-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand" aria-label="Warehouse Management System Home">
+                <span>Warehouse Management System</span>
+                <span class="brand-badge">WMS</span>
+            </a>
+            <nav class="main-nav" aria-label="Primary Navigation">
+                <ul>
+                    <li><a href="index.html" class="active" aria-current="page">Dashboard</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="inventory.html">Inventory</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="main-content">
+        <div class="page-header">
+            <h1>Warehouse Operations Dashboard</h1>
+            <p>Welcome to the Warehouse Management System. Monitor product catalogs, track stock counts, and execute inward/outward inventory movements.</p>
+        </div>
+
+        <!-- Real-Time Metrics -->
+        <section class="dashboard-grid" aria-label="Summary Statistics">
+            <div class="stat-card">
+                <div class="stat-card-title">Total Product Types</div>
+                <div class="stat-card-value" id="stat-products">--</div>
+                <div class="stat-card-desc">Active SKUs registered in warehouse</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-title">Total Units in Stock</div>
+                <div class="stat-card-value" id="stat-stock">--</div>
+                <div class="stat-card-desc">Aggregated quantity across all items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-title">Low Stock Items</div>
+                <div class="stat-card-value" id="stat-low-stock">--</div>
+                <div class="stat-card-desc">Products with quantity &le; 10 units</div>
+            </div>
+        </section>
+
+        <!-- Navigation Cards for Primary Workflows -->
+        <section aria-label="Quick Access Modules">
+            <div class="nav-card-grid">
+                <article class="nav-card">
+                    <div>
+                        <span class="jira-pill">SCRUM-8 &amp; SCRUM-9</span>
+                        <h2>Product Management</h2>
+                        <p>Create new warehouse product entries, maintain catalog attributes (ID, name, category, unit price, description), and update existing records.</p>
+                    </div>
+                    <div class="nav-card-footer">
+                        <a href="products.html" class="btn btn-primary">Manage Products &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="nav-card">
+                    <div>
+                        <span class="jira-pill">SCRUM-10</span>
+                        <h2>Inventory Management</h2>
+                        <p>Perform inward receiving (add stock) and outward dispatch (reduce stock). Enforces zero, negative, and non-numeric validation to prevent negative stock.</p>
+                    </div>
+                    <div class="nav-card-footer">
+                        <a href="inventory.html" class="btn btn-primary">Manage Inventory &rarr;</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- System Architecture & Verification Info for Faculty Viva -->
+        <section class="panel" style="margin-top: 32px;" aria-label="Project Verification Information">
+            <div class="panel-header">
+                <h2>Project Information &amp; Architecture (Viva Quick Reference)</h2>
+            </div>
+            <div class="panel-body">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; font-size: 14px;">
+                    <div>
+                        <strong>Frontend:</strong> HTML5, CSS3, Vanilla JavaScript (Fetch API, zero frameworks)
+                    </div>
+                    <div>
+                        <strong>Backend:</strong> Java Servlets (<code>ProductServlet</code>, <code>InventoryServlet</code>)
+                    </div>
+                    <div>
+                        <strong>Data Layer:</strong> JDBC with <code>PreparedStatement</code> (SQL-injection safe)
+                    </div>
+                    <div>
+                        <strong>Database:</strong> MySQL 8.4 (<code>wms_db</code> on port 3306)
+                    </div>
+                    <div>
+                        <strong>Server:</strong> Apache Tomcat 9.0.97
+                    </div>
+                    <div>
+                        <strong>Security:</strong> Server-side validation, XSS escaping, least-privilege DB user
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>Warehouse Management System &bull; Built with HTML, CSS, Vanilla JS, Java Servlets, JDBC, MySQL, and Apache Tomcat</p>
+    </footer>
+
+    <script>
+        // Load live dashboard summary metrics
+        (function loadDashboardMetrics() {
+            fetch('api/products')
+                .then(function(res) {
+                    if (!res.ok) throw new Error('API returned status ' + res.status);
+                    return res.json();
+                })
+                .then(function(data) {
+                    if (data && data.success && Array.isArray(data.data)) {
+                        var products = data.data;
+                        var totalProducts = products.length;
+                        var totalStock = 0;
+                        var lowStock = 0;
+
+                        products.forEach(function(p) {
+                            var qty = parseInt(p.quantity, 10) || 0;
+                            totalStock += qty;
+                            if (qty <= 10) lowStock++;
+                        });
+
+                        document.getElementById('stat-products').textContent = totalProducts;
+                        document.getElementById('stat-stock').textContent = totalStock.toLocaleString();
+                        document.getElementById('stat-low-stock').textContent = lowStock;
+                    }
+                })
+                .catch(function(err) {
+                    console.log('Dashboard fetch fallback:', err);
+                    document.getElementById('stat-products').textContent = '0';
+                    document.getElementById('stat-stock').textContent = '0';
+                    document.getElementById('stat-low-stock').textContent = '0';
+                });
+        })();
+    </script>
+</body>
+</html>

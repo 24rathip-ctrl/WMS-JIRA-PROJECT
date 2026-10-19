@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 Internal Server Error — Warehouse Management System</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span>Warehouse Management System</span>
+                <span class="brand-badge">WMS</span>
+            </a>
+            <nav class="main-nav" aria-label="Main Navigation">
+                <ul>
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="inventory.html">Inventory</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="panel" style="max-width: 600px; margin: 60px auto; text-align: center;">
+            <div class="panel-body" style="padding: 40px 24px;">
+                <h1 style="font-size: 48px; color: #c53030; margin-bottom: 8px;">500</h1>
+                <h2 style="font-size: 20px; margin-bottom: 12px; color: var(--color-text-primary);">Server Processing Error</h2>
+                <p style="color: var(--color-text-secondary); margin-bottom: 24px;">
+                    An unexpected server error occurred while processing your warehouse request. Internal diagnostics have been logged safely.
+                </p>
+                <div>
+                    <a href="index.html" class="btn btn-primary">Return to Dashboard</a>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.reload();" style="margin-left: 8px;">Retry Operation</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>Warehouse Management System &bull; Software Engineering Practical Project</p>
+    </footer>
+</body>
+</html>
