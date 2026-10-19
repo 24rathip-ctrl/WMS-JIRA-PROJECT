@@ -180,7 +180,7 @@ function renderInventoryTable(items) {
             '<td class="mono"><strong>' + escapeHtml(item.productId) + '</strong></td>' +
             '<td>' + escapeHtml(item.name) + '</td>' +
             '<td>' + escapeHtml(item.category) + '</td>' +
-            '<td class="numeric">$' + escapeHtml(priceFormatted) + '</td>' +
+            '<td class="numeric">₹' + escapeHtml(priceFormatted) + '</td>' +
             '<td class="numeric"><strong>' + escapeHtml(qty) + '</strong></td>' +
             '<td>' + getStatusBadgeHtml(qty) + '</td>' +
             '<td style="text-align: center;">' +

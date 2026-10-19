@@ -113,7 +113,7 @@ function renderProductTable(products) {
             '<td class="mono"><strong>' + escapeHtml(p.productId) + '</strong></td>' +
             '<td>' + escapeHtml(p.name) + '</td>' +
             '<td>' + escapeHtml(p.category) + '</td>' +
-            '<td class="numeric">$' + escapeHtml(priceFormatted) + '</td>' +
+            '<td class="numeric">₹' + escapeHtml(priceFormatted) + '</td>' +
             '<td class="numeric">' + escapeHtml(qty) + '</td>' +
             '<td>' + escapeHtml(p.description || '—') + '</td>' +
             '<td style="text-align: center;">' +
