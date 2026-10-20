@@ -19,6 +19,7 @@ Thumbs.db
 
 # Build output
 *.war
+dist/
 out/
 build/
 target/
