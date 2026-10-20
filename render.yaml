@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: wms
+    runtime: docker
+    repo: https://github.com/24rathip-ctrl/WMS-JIRA-PROJECT
+    branch: main
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /wms/
+    autoDeploy: true
+    envVars:
+      - key: WMS_DB_URL
+        sync: false               # user-supplied secret
+      - key: WMS_DB_USER
+        sync: false
+      - key: WMS_DB_PASS
+        sync: false

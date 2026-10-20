@@ -1,0 +1,31 @@
+# Build context exclusions — keep the Docker image lean
+.git
+.github
+.gitignore
+.idea
+.vscode
+*.iml
+*.md
+!web/**/*.html
+
+# Local-only files
+config/db.properties
+dist/
+out/
+build/
+target/
+test/
+*.log
+Thumbs.db
+.DS_Store
+
+# Compiled classes (rebuilt in Docker)
+*.class
+web/WEB-INF/classes/
+web/WEB-INF/lib/
+
+# Scripts not needed in container
+*.bat
+*.ps1
+start_servers.bat
+push_to_github.bat

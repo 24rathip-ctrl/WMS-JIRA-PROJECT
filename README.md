@@ -201,3 +201,65 @@ During your project demonstration or viva:
    - Outward movement: Reduce `20` units &rarr; stock becomes `30`.
    - Attempt to reduce `100` units &rarr; show system rejection: `Cannot reduce by 100. Current stock is only 30.`
 5. **Show Code Architecture:** Open `ProductDAO.java` to showcase the `PreparedStatement` queries and transaction logic with `FOR UPDATE`.
+
+---
+
+## 9. Cloud Deployment (Render + Aiven MySQL)
+
+The application can be deployed to the cloud using **Render** (Docker web service) and **Aiven** (managed MySQL).
+
+### Step 1: Create Aiven MySQL Service
+
+1. Sign up at [aiven.io](https://aiven.io) and create a **Free MySQL** service.
+2. From the Aiven dashboard, note the connection details:
+   - **Host** (e.g. `mysql-xyz.aiven.io`)
+   - **Port** (e.g. `12345`)
+   - **Database** (default: `defaultdb`)
+   - **User** (default: `avnadmin`)
+   - **Password** (shown once at creation)
+
+### Step 2: Initialize the Database Schema
+
+Run the cloud-compatible schema script against your Aiven database:
+
+```bash
+mysql -h <HOST> -P <PORT> -u <USER> -p<PASSWORD> \
+      --ssl-mode=REQUIRED <DATABASE> < sql/schema_cloud.sql
+```
+
+This creates the `products` table and seeds sample warehouse data. No `CREATE DATABASE` or `CREATE USER` is needed — Aiven provisions those automatically.
+
+### Step 3: Create the Render Web Service
+
+1. Sign up at [render.com](https://render.com) and click **New → Web Service**.
+2. Connect the GitHub repository: `24rathip-ctrl/WMS-JIRA-PROJECT`.
+3. Choose **Docker** as the runtime. Render will auto-detect the `Dockerfile`.
+4. Select the **Free** plan, and set the branch to `main`.
+5. Under **Environment Variables**, add these three secrets:
+
+   | Key          | Value                                                                                          |
+   |---|---|
+   | `WMS_DB_URL`  | `jdbc:mysql://<HOST>:<PORT>/<DATABASE>?sslMode=REQUIRED&serverTimezone=UTC` (or `useSSL=true&requireSSL=true`) |
+   | `WMS_DB_USER` | `avnadmin` (or your Aiven user)                                                                |
+   | `WMS_DB_PASS` | Your Aiven password                                                                            |
+
+6. Click **Create Web Service**. Render will build the Docker image and deploy automatically.
+
+### Step 4: Access the Live Application
+
+Once the Render deploy completes, your WMS is live at:
+
+- **Dashboard:** `https://<your-render-service>.onrender.com/wms/`
+- **Products:** `https://<your-render-service>.onrender.com/wms/products.html`
+- **Inventory:** `https://<your-render-service>.onrender.com/wms/inventory.html`
+
+### Architecture (Cloud)
+
+```
+Browser → Render (Docker/Tomcat 9) → Aiven MySQL (SSL)
+           ├── Dockerfile (multi-stage build)
+           ├── render.yaml (service config)
+           └── Environment variables (secrets)
+```
+
+> **Note:** Credentials are never committed to Git. They are injected as environment variables at runtime. `DBConnection.java` reads `WMS_DB_URL`, `WMS_DB_USER`, and `WMS_DB_PASS` from the environment automatically.
