@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inventory management module for warehouse inward and outward stock adjustments.">
+    <title>Inventory Management — Warehouse Management System</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Unified Application Navigation Header -->
+    <header class="app-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand" aria-label="Warehouse Management System Home">
+                <span>Warehouse Management System</span>
+                <span class="brand-badge">WMS</span>
+            </a>
+            <nav class="main-nav" aria-label="Primary Navigation">
+                <ul>
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="products.html">Product Management</a></li>
+                    <li><a href="inventory.html" class="active" aria-current="page">Inventory Management</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="main-content">
+        <!-- Subnav / Breadcrumb & Cross-Link Bar -->
+        <div class="subnav-bar">
+            <div class="breadcrumb" aria-label="Breadcrumbs">
+                <a href="index.html">&larr; Dashboard</a>
+                <span class="sep">/</span>
+                <span class="current">Inventory Management</span>
+            </div>
+            <div class="subnav-links" aria-label="Module Quick Links">
+                <a href="index.html">&larr; Back to Dashboard</a>
+                <a href="products.html" class="active-link">Switch to Product Management &rarr;</a>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h1>Inventory Management</h1>
+            <p><span class="jira-pill">SCRUM-10</span> Inward stock receiving &bull; Outward stock reduction &bull; Negative stock prevention</p>
+        </div>
+
+        <!-- Notification Banner -->
+        <div id="status-banner" class="alert-banner hidden" role="alert" aria-live="polite">
+            <span id="status-message"></span>
+            <button type="button" class="alert-close" aria-label="Dismiss message" onclick="dismissBanner()">&times;</button>
+        </div>
+
+        <!-- Section 1: Stock Adjustment Form -->
+        <section class="panel" aria-labelledby="adjust-heading">
+            <div class="panel-header">
+                <h2 id="adjust-heading">Adjust Stock (SCRUM-10)</h2>
+            </div>
+            <div class="panel-body">
+                <form id="stock-form" novalidate>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productId">Select Product <span class="required" aria-hidden="true">*</span></label>
+                            <select id="productId" name="productId" required onchange="handleProductSelect()">
+                                <option value="">-- Choose Product --</option>
+                            </select>
+                            <span class="form-help">Current stock will be indicated next to each item</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="action">Movement Type <span class="required" aria-hidden="true">*</span></label>
+                            <select id="action" name="action" required>
+                                <option value="add">Add Stock (Inward Receiving)</option>
+                                <option value="reduce">Reduce Stock (Outward Dispatch)</option>
+                            </select>
+                            <span class="form-help">Choose whether to increase or decrease inventory</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Quantity (Units) <span class="required" aria-hidden="true">*</span></label>
+                            <input type="number" id="quantity" name="quantity" required min="1" step="1" placeholder="e.g. 25">
+                            <span class="form-help">Must be a whole positive integer (&gt; 0)</span>
+                        </div>
+
+                        <div class="form-group" style="justify-content: flex-end;">
+                            <div id="current-stock-preview" style="background-color: #f8fafc; border: 1px solid var(--color-border); border-radius: var(--border-radius-sm); padding: 8px 12px; font-size: 13px;">
+                                <strong>Selected Item Stock:</strong> <span id="preview-stock-value">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary" onclick="resetStockForm()">Reset</button>
+                        <button type="submit" class="btn btn-primary" id="btn-submit-stock">Apply Stock Adjustment</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Section 2: Real-Time Warehouse Stock Levels Table -->
+        <section class="panel" aria-labelledby="inventory-table-heading">
+            <div class="panel-header">
+                <h2 id="inventory-table-heading">Warehouse Stock Levels</h2>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <label for="inventory-search" class="visually-hidden" style="display:none;">Search Inventory</label>
+                    <input type="text" id="inventory-search" placeholder="Filter by ID, name, or status..." style="width: 260px; font-size: 13px;" oninput="filterInventory()">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="loadInventory()">Refresh</button>
+                </div>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <div class="table-responsive">
+                    <table class="data-table" id="inventory-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product ID</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Category</th>
+                                <th scope="col" class="numeric">Unit Price (₹)</th>
+                                <th scope="col" class="numeric">Current Stock</th>
+                                <th scope="col">Inventory Status</th>
+                                <th scope="col" style="text-align: center;">Quick Adjust</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-tbody">
+                            <!-- Populated dynamically via vanilla JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="empty-state" class="empty-state hidden">
+                    <div class="empty-state-title">No Inventory Items Found</div>
+                    <p>No products are currently registered. Visit the <a href="products.html">Product Management</a> page to add products.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Quick Stock Adjust from Table -->
+    <div id="quick-adjust-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="quick-modal-heading">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="quick-modal-heading">Quick Stock Adjustment</h3>
+                <button type="button" class="modal-close" aria-label="Close dialog" onclick="closeQuickModal()">&times;</button>
+            </div>
+            <form id="quick-adjust-form" novalidate>
+                <div class="modal-body">
+                    <input type="hidden" id="quick-productId" name="productId">
+                    <p style="margin-bottom: 12px; font-size: 14px;">
+                        Adjusting stock for: <strong id="quick-product-name">—</strong> (<span id="quick-product-id-label" class="mono"></span>)
+                    </p>
+                    <div style="background-color: #f1f5f9; padding: 10px 14px; border-radius: var(--border-radius-sm); margin-bottom: 16px; font-size: 13px;">
+                        Current Available Stock: <strong id="quick-current-qty">0</strong> units
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label for="quick-action">Adjustment Direction <span class="required" aria-hidden="true">*</span></label>
+                        <select id="quick-action" name="action" required>
+                            <option value="add">Add Stock (Inward)</option>
+                            <option value="reduce">Reduce Stock (Outward)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quick-quantity">Quantity to Move <span class="required" aria-hidden="true">*</span></label>
+                        <input type="number" id="quick-quantity" name="quantity" required min="1" step="1" placeholder="e.g. 10">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeQuickModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-quick-save">Execute Adjustment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <p>Warehouse Management System &bull; Unified Web Application built with HTML, CSS, Vanilla JS, Java Servlets, JDBC, MySQL, and Apache Tomcat</p>
+    </footer>
+
+    <script src="js/inventory.js"></script>
+</body>
+</html>
