@@ -1,6 +1,6 @@
-# Warehouse Management System (WMS)
+# Electronics Warehouse Management System (WMS)
 
-A simple, robust, and professional **Warehouse Management System** built for the Software Engineering Practical Examination. Designed specifically for clear faculty viva defense, zero framework bloat, and enterprise-grade reliability.
+A simple, robust, and professional **Electronics Warehouse Management System** built for the Software Engineering Practical Examination. Designed specifically for clear faculty viva defense, zero framework bloat, and enterprise-grade reliability.
 
 ---
 
