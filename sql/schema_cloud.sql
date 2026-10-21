@@ -25,11 +25,11 @@ CREATE TABLE IF NOT EXISTS products (
 
 -- Seed electronics warehouse items
 INSERT INTO products (product_id, name, category, unit_price, quantity, description) VALUES
-('WMS-101', 'ProBook 15 G10 Laptop (16GB RAM, 512GB SSD)', 'Laptops & Computers', 64999.00, 35, '15.6-inch FHD anti-glare display with Intel Core i7 processor'),
-('WMS-102', 'Ultra 5G Smartphone (128GB Storage, 8GB RAM)', 'Mobile & Tablets', 24999.00, 50, 'AMOLED display mobile smartphone with 50MP triple camera system'),
-('WMS-103', 'BoomBlast Wireless Bluetooth Party Speaker (40W)', 'Audio & Speakers', 4999.00, 8, 'Portable waterproof IPX7 bluetooth speaker with deep bass radiator'),
-('WMS-104', 'Studio USB Condenser Microphone with Pop Filter', 'Microphones & Recording', 3499.00, 18, 'Cardioid studio recording microphone for podcasts and streaming'),
-('WMS-105', '55-Inch 4K Ultra HD Smart OLED Television', 'Televisions & Displays', 54999.00, 5, 'Dolby Vision HDR smart television display with Google TV OS'),
-('WMS-106', 'Wireless Active Noise-Cancelling (ANC) Headset', 'Headsets & Wearables', 7999.00, 24, 'Over-ear wireless bluetooth headset with 40-hour battery life'),
-('WMS-107', 'Fast Charging GaN Desktop Power Hub (65W)', 'Electronics Accessories', 1999.00, 0, 'Multi-port USB-C fast charging adapter for laptops and mobiles')
+('WMS-101', 'Apple MacBook Pro 16" (M3 Max, 36GB RAM, 1TB SSD)', 'Laptops & Computers', 249900.00, 15, 'Liquid Retina XDR display with Apple M3 Max 14-core CPU and 30-core GPU'),
+('WMS-102', 'Apple iPhone 16 Pro Max (256GB, Desert Titanium)', 'Mobile & Tablets', 144900.00, 42, 'Super Retina XDR 6.9-inch OLED with A18 Pro chip and 48MP Fusion camera'),
+('WMS-103', 'JBL PartyBox Stage 320 Bluetooth Speaker (240W)', 'Audio & Speakers', 39999.00, 8, 'High-power portable wireless party speaker with AI sound boost and lightshow'),
+('WMS-104', 'Shure SM7B Cardioid Dynamic Studio Microphone', 'Microphones & Recording', 34500.00, 18, 'Legendary broadcast vocal microphone with flat wide-range frequency response'),
+('WMS-105', 'Sony Bravia XR 65" 4K OLED Smart Google TV', 'Televisions & Displays', 189900.00, 4, 'Cognitive Processor XR OLED panel with Acoustic Surface Audio+ and Dolby Vision'),
+('WMS-106', 'Sony WH-1000XM5 Wireless Noise Cancelling Headset', 'Headsets & Wearables', 29990.00, 25, 'Premium over-ear wireless headphones with Auto NC Optimizer and 30hr battery'),
+('WMS-107', 'Apple 140W USB-C Power Adapter + MagSafe 3 Cable', 'Electronics Accessories', 9500.00, 0, 'Fast charging GaN power adapter with 2-meter braided USB-C to MagSafe 3 cable')
 ON DUPLICATE KEY UPDATE name=VALUES(name), category=VALUES(category), unit_price=VALUES(unit_price), quantity=VALUES(quantity), description=VALUES(description);
