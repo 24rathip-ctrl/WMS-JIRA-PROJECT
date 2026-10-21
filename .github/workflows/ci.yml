@@ -67,3 +67,7 @@ jobs:
           name: wms-war
           path: wms.war
           if-no-files-found: error
+
+      - name: Validate Docker Build
+        run: |
+          docker build -t wms:ci .
