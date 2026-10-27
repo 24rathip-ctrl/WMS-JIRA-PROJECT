@@ -110,13 +110,12 @@ function renderTables() {
         var customBadge = t.custom ? '<span class="badge badge-low-stock" style="font-size:10px; margin-left:6px; vertical-align:middle;">Custom</span>' : '';
         return '<tr class="clickable-row" onclick="toggleDetail(\'wb\',' + idx + ')">' +
             '<td class="mono"><strong>' + escapeHtml(t.id) + '</strong></td>' +
-            '<td><code>' + escapeHtml(t.target) + '</code>' + customBadge + '<br><span style="font-size:12px; color:var(--color-text-muted);">' + escapeHtml(t.method) + '</span></td>' +
-            '<td><span class="badge" style="background:#e2e8f0; color:#2d3748;">' + escapeHtml(t.type) + '</span></td>' +
+            '<td><span class="badge" style="background:#e2e8f0; color:#2d3748;">' + escapeHtml(t.type) + '</span>' + customBadge + '</td>' +
             '<td>' + escapeHtml(t.path) + '</td>' +
             '<td style="text-align:center;"><span class="badge badge-in-stock">PASS</span></td>' +
         '</tr>' +
         '<tr id="detail-wb-' + idx + '" class="detail-row">' +
-            '<td colspan="5">' +
+            '<td colspan="4">' +
                 '<div class="detail-card">' +
                     '<div><strong>Target Method:</strong> <code>' + escapeHtml(t.target) + '.' + escapeHtml(t.method) + '</code></div>' +
                     '<div><strong>Coverage Path:</strong> ' + escapeHtml(t.path) + '</div>' +
