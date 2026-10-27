@@ -1,0 +1,31 @@
+Test Case ID,Test Scenario,Testing Technique,Input (Method & Endpoint),Expected Output,Actual Output,Status
+BB-01,Create new product with valid mandatory and optional attributes,Equivalence Partitioning (Valid),POST /api/products,HTTP 201,HTTP 201,Pass
+BB-02,Reject product creation when Product ID is omitted,Equivalence Partitioning (Invalid),POST /api/products,HTTP 400,HTTP 400,Pass
+BB-03,Reject product creation with whitespace-only Product ID,Boundary Value / Error Guessing,POST /api/products,HTTP 400,HTTP 400,Pass
+BB-04,Accept product creation with maximum length Product ID (20 characters),Boundary Value Analysis (Max),POST /api/products,HTTP 201,HTTP 201,Pass
+BB-05,Reject product creation when Product Name is empty,Equivalence Partitioning (Invalid),POST /api/products,HTTP 400,HTTP 400,Pass
+BB-06,Reject product creation when Category is empty,Equivalence Partitioning (Invalid),POST /api/products,HTTP 400,HTTP 400,Pass
+BB-07,Reject product creation when Unit Price is missing,Equivalence Partitioning (Invalid),POST /api/products,HTTP 400,HTTP 400,Pass
+BB-08,Accept product creation with minimum positive unit price of 0.01,Boundary Value Analysis (Min Valid),POST /api/products,HTTP 201,HTTP 201,Pass
+BB-09,Reject product creation when Unit Price is zero (0.00),Boundary Value Analysis (Zero Invalid),POST /api/products,HTTP 400,HTTP 400,Pass
+BB-10,Reject product creation when Unit Price is negative (-499.00),Boundary Value Analysis (Negative),POST /api/products,HTTP 400,HTTP 400,Pass
+BB-11,Reject product creation when Unit Price contains non-numeric text,Error Guessing (Type Mismatch),POST /api/products,HTTP 400,HTTP 400,Pass
+BB-12,Accept product creation with high-value enterprise pricing (999999.99),Boundary Value Analysis (Large Num),POST /api/products,HTTP 201,HTTP 201,Pass
+BB-13,Reject duplicate Product ID creation with 409 Conflict,Equivalence Partitioning (Conflict),POST /api/products,HTTP 409,HTTP 409,Pass
+BB-14,"Accept description containing quotes, slashes, and symbols without crashing",Error Guessing (Special Chars),POST /api/products,HTTP 201,HTTP 201,Pass
+BB-15,Sanitize/escape HTML and script tags in product input fields,Security (XSS Input Handling),POST /api/products,HTTP 201,HTTP 201,Pass
+BB-16,Retrieve full catalog listing containing all registered products,Equivalence Partitioning (Read),GET /api/products,HTTP 200,HTTP 200,Pass
+BB-17,Retrieve single product details by specific valid product ID query,Equivalence Partitioning (Read Single),GET /api/products?id=WMS-101,HTTP 200,HTTP 200,Pass
+BB-18,Return 404 when querying single product with unknown product ID,Equivalence Partitioning (Not Found),GET /api/products?id=GHOST-999,HTTP 404,HTTP 404,Pass
+BB-19,"Update existing product details (name, category, price, description)",Equivalence Partitioning (Update Valid),PUT /api/products,HTTP 200,HTTP 200,Pass
+BB-20,Reject product update when updated name is empty string,Equivalence Partitioning (Update Invalid),PUT /api/products,HTTP 400,HTTP 400,Pass
+BB-21,Reject product update when updated unit price is negative,Boundary Value Analysis (Update Price),PUT /api/products,HTTP 400,HTTP 400,Pass
+BB-22,Reject product update for non-existent product ID with 404 Not Found,Equivalence Partitioning (Update 404),PUT /api/products,HTTP 404,HTTP 404,Pass
+BB-23,Retrieve live warehouse stock status table for all inventory items,Equivalence Partitioning (Inventory List),GET /api/inventory,HTTP 200,HTTP 200,Pass
+BB-24,Add positive stock quantity to product (Inward Receiving: +50 units),State Transition (Stock Inward),POST /api/inventory,HTTP 200,HTTP 200,Pass
+BB-25,Add smallest valid integer quantity (+1 unit) to stock,Boundary Value Analysis (Min Stock Add),POST /api/inventory,HTTP 200,HTTP 200,Pass
+BB-26,Reduce stock quantity for order fulfillment (Outward Dispatch: -20 units),State Transition (Stock Outward),POST /api/inventory,HTTP 200,HTTP 200,Pass
+BB-27,Reduce exact available stock down to zero boundary without negative error,Boundary / State Transition (Deplete 0),POST /api/inventory,HTTP 200,HTTP 200,Pass
+BB-28,"Prevent stock reduction greater than available inventory (Current: 0, Attempt: -5)",Boundary Value (Negative Prevention),POST /api/inventory,HTTP 400,HTTP 400,Pass
+BB-29,Reject stock adjustment when quantity is zero (0 units),Boundary Value (Zero Stock Movement),POST /api/inventory,HTTP 400,HTTP 400,Pass
+BB-30,Reject stock adjustment with unsupported action verb 'discard',Error Guessing (Invalid Action),POST /api/inventory,HTTP 400,HTTP 400,Pass
