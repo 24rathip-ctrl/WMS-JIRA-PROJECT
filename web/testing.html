@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="description" content="Electronics Warehouse Management System - Quality Assurance and Testing Suite">
     <title>Electronics WMS — Testing & Verification</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -121,6 +124,93 @@
             margin: 8px 0;
             line-height: 1.6;
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-container {
+            background: #ffffff;
+            border-radius: var(--border-radius-md, 8px);
+            max-width: 680px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--color-border);
+        }
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body {
+            padding: 20px 24px;
+        }
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--color-border);
+            background: #f8fafc;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 5px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius, 6px);
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #ffffff;
+            color: var(--color-text-primary);
+        }
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .ai-verdict-box {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: var(--border-radius, 6px);
+            font-size: 13px;
+            line-height: 1.5;
+            border-left: 4px solid #10b981;
+            background: #f0fdf4;
+            color: #166534;
+            display: none;
+        }
+        .ai-verdict-box.fail {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+            color: #991b1b;
+        }
     </style>
 </head>
 <body>
@@ -173,10 +263,13 @@
                     Executes real-time HTTP requests against the live backend to verify validation, transactions, and row-locking.
                 </div>
             </div>
-            <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                 <span id="suite-status-pill" class="badge badge-in-stock" style="font-size: 13px; padding: 6px 14px;">
                     60 / 60 Tests Passed (100%)
                 </span>
+                <button type="button" class="btn btn-secondary" id="btn-add-test" onclick="openAddTestModal()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                    ➕ Add Test Case &amp; AI Check
+                </button>
                 <button type="button" class="btn btn-primary" id="btn-run-tests" onclick="runLiveTests()">
                     ▶ Run Live Test Suite
                 </button>
@@ -268,6 +361,134 @@
                 </div>
             </div>
         </div>
+        <!-- MODAL: ADD TEST CASE & AI EVALUATOR -->
+        <div id="modal-add-test" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-add-title">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <div>
+                        <h3 id="modal-add-title" style="margin: 0; font-size: 17px; color: var(--color-primary);">➕ Add Test Case &amp; Automated AI Evaluator</h3>
+                        <div style="font-size: 12px; color: var(--color-text-muted); margin-top: 2px;">
+                            Define test specifications. The automated AI engine will evaluate and execute them live against the backend.
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeAddTestModal()" style="background:none; border:none; font-size:22px; cursor:pointer; color:var(--color-text-secondary);">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tc-type">Test Category</label>
+                            <select id="tc-type" class="form-control" onchange="onCategoryChange()">
+                                <option value="BB">Black Box (API Specification)</option>
+                                <option value="WB">White Box (Structural Code Coverage)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tc-id">Test Case ID</label>
+                            <input type="text" id="tc-id" class="form-control" value="BB-31" readonly style="background:#f1f5f9; font-weight:700;">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tc-methodology">Methodology / Testing Criterion</label>
+                            <select id="tc-methodology" class="form-control">
+                                <option value="Equivalence Partitioning">Equivalence Partitioning</option>
+                                <option value="Boundary Value Analysis">Boundary Value Analysis</option>
+                                <option value="Error Guessing &amp; Negative Testing">Error Guessing &amp; Negative Testing</option>
+                                <option value="State Transition Testing">State Transition Testing</option>
+                                <option value="Security &amp; Sanitization">Security &amp; Sanitization</option>
+                                <option value="Branch Coverage">Branch Coverage</option>
+                                <option value="Statement Coverage">Statement Coverage</option>
+                                <option value="Concurrency / Row-Locking">Concurrency / Row-Locking</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="group-status">
+                            <label for="tc-expected-status">Expected Status</label>
+                            <select id="tc-expected-status" class="form-control">
+                                <option value="200 OK">200 OK</option>
+                                <option value="201 Created">201 Created</option>
+                                <option value="400 Bad Request">400 Bad Request</option>
+                                <option value="404 Not Found">404 Not Found</option>
+                                <option value="409 Conflict">409 Conflict</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tc-desc">Scenario &amp; Business Objective</label>
+                        <input type="text" id="tc-desc" class="form-control" placeholder="e.g. Verify addition of flagship tablet SKU with standard INR pricing" value="Create new Apple Watch Ultra 2 with valid pricing">
+                    </div>
+
+                    <!-- Black Box Specific Fields -->
+                    <div id="bb-fields">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tc-endpoint">Endpoint</label>
+                                <select id="tc-endpoint" class="form-control">
+                                    <option value="/api/products">/api/products</option>
+                                    <option value="/api/inventory">/api/inventory</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tc-method">HTTP Method</label>
+                                <select id="tc-method" class="form-control">
+                                    <option value="POST">POST (Create / Adjust)</option>
+                                    <option value="GET">GET (Query / Read)</option>
+                                    <option value="PUT">PUT (Update)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tc-payload">Payload (JSON or Parameters)</label>
+                            <textarea id="tc-payload" class="form-control" rows="3" style="font-family: monospace; font-size: 13px;">{"productId":"WMS-108","name":"Apple Watch Ultra 2","category":"Headsets & Wearables","unitPrice":89900.00}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- White Box Specific Fields -->
+                    <div id="wb-fields" style="display:none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tc-target">Target Class &amp; Method</label>
+                                <input type="text" id="tc-target" class="form-control" value="ProductDAO.java - addStock()">
+                            </div>
+                            <div class="form-group">
+                                <label for="tc-criterion">Coverage Criterion</label>
+                                <input type="text" id="tc-criterion" class="form-control" value="Branch / Decision Coverage">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tc-path">Logic Path / Decision Condition</label>
+                            <textarea id="tc-path" class="form-control" rows="2" style="font-family: monospace; font-size: 13px;">Branch: amount &gt; 0 AND stock row exists -&gt; execute atomic increment under row lock</textarea>
+                        </div>
+                    </div>
+
+                    <!-- AI / Automated Verification Console Box -->
+                    <div style="margin-top: 18px; padding: 14px; background: #f8fafc; border: 1px dashed var(--color-border); border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 13px; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                                <span>🤖</span> Automated AI Evaluation Engine
+                            </span>
+                            <button type="button" class="btn btn-primary" id="btn-ai-eval" onclick="runAiEvaluation()" style="font-size: 13px; padding: 6px 14px;">
+                                🤖 Run AI Live Verification
+                            </button>
+                        </div>
+                        <div style="font-size: 12px; color: var(--color-text-muted);">
+                            The engine executes this test against the live cloud backend, computes response latency, validates schema compliance, and certifies pass/fail.
+                        </div>
+                        <div id="ai-verdict-box" class="ai-verdict-box">
+                            <!-- AI Evaluation details injected here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddTestModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="btn-save-test" onclick="saveCustomTestCase()" disabled style="opacity: 0.6; cursor: not-allowed;">
+                        💾 Save Test Case to Suite
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer class="app-footer">
@@ -275,6 +496,6 @@
     </footer>
 
     <!-- Clean external script link completely avoiding unescaped HTML parser bugs -->
-    <script src="js/testing.js"></script>
+    <script src="js/testing.js?v=4.0"></script>
 </body>
 </html>
