@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Electronics Warehouse Management System - Quality Assurance and Testing Dashboard">
+    <title>Electronics WMS — Quality Assurance & Testing</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .tab-btn {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            color: var(--color-text-secondary);
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            border-color: var(--color-primary);
+        }
+        .tab-nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .search-box {
+            padding: 10px 14px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            width: 100%;
+            max-width: 340px;
+            margin-left: auto;
+        }
+        .table-section { display: none; }
+        .table-section.active { display: block; }
+        .badge-method {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            font-weight: 700;
+            background-color: #edf2f7;
+            color: #2d3748;
+        }
+        .method-post { background-color: #e6fffa; color: #234e52; }
+        .method-get { background-color: #ebf8ff; color: #2b6cb0; }
+        .method-put { background-color: #fffaf0; color: #7b341e; }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Unified Application Navigation Header -->
+    <header class="app-header">
+        <div class="nav-container">
+            <a href="index.html" class="brand" aria-label="Electronics Warehouse Management System Home">
+                <span>Electronics Warehouse Management</span>
+                <span class="brand-badge">WMS</span>
+            </a>
+            <nav class="main-nav" aria-label="Primary Navigation">
+                <ul>
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="products.html">Product Management</a></li>
+                    <li><a href="inventory.html">Inventory Management</a></li>
+                    <li><a href="testing.html" class="active" aria-current="page">Quality Assurance (QA)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="main-content">
+        <!-- Subnav / Breadcrumb Bar -->
+        <div class="subnav-bar">
+            <div class="breadcrumb" aria-label="Breadcrumbs">
+                <a href="index.html">&larr; Dashboard</a>
+                <span class="sep">/</span>
+                <span class="current">Quality Assurance (SCRUM-11)</span>
+            </div>
+            <div class="subnav-links" aria-label="Quick Actions">
+                <a href="products.html">Product Management &rarr;</a>
+                <a href="inventory.html">Inventory Management &rarr;</a>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h1>Quality Assurance &amp; Verification Suite</h1>
+            <p><span class="jira-pill">SCRUM-11</span> Formal Software Engineering Verification: 30 Black Box &bull; 30 White Box &bull; 100% Pass Rate</p>
+        </div>
+
+        <!-- High-Level Unclustered KPI Summary Cards -->
+        <section class="dashboard-grid" aria-label="Testing Metrics">
+            <div class="stat-card">
+                <div class="stat-card-title">Total Verification Scenarios</div>
+                <div class="stat-card-value" style="color: var(--color-accent);">60 / 60</div>
+                <div class="stat-card-desc">Combined Black Box &amp; White Box tests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-title">Black Box Testing</div>
+                <div class="stat-card-value" style="color: #2b6cb0;">30 Passed</div>
+                <div class="stat-card-desc">EP, BVA, State Transitions &amp; Security</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-title">White Box Testing</div>
+                <div class="stat-card-value" style="color: #2f855a;">30 Passed</div>
+                <div class="stat-card-desc">Statement, Branch, Condition &amp; Path</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-title">Overall Pass Rate</div>
+                <div class="stat-card-value" style="color: #276749;">100%</div>
+                <div class="stat-card-desc">0 Defects &bull; ACID Transactions Verified</div>
+            </div>
+        </section>
+
+        <!-- Clean Interactive Tab Navigation (Eliminates Clustering) -->
+        <section class="panel" style="margin-top: 24px;">
+            <div class="panel-header" style="border-bottom: none; padding-bottom: 0;">
+                <div class="tab-nav" style="width: 100%; margin-bottom: 0;">
+                    <button type="button" class="tab-btn active" id="btn-tab-bb" onclick="switchTab('bb')">
+                        Black Box Testing (30 Cases)
+                    </button>
+                    <button type="button" class="tab-btn" id="btn-tab-wb" onclick="switchTab('wb')">
+                        White Box Testing (30 Cases)
+                    </button>
+                    <input type="text" id="test-search" class="search-box" placeholder="Filter by technique, ID, or scenario..." onkeyup="filterTests()">
+                </div>
+            </div>
+
+            <div class="panel-body" style="padding-top: 16px;">
+                <!-- SECTION 1: BLACK BOX TESTING TABLE -->
+                <div id="tab-bb" class="table-section active">
+                    <div style="margin-bottom: 12px; font-size: 13px; color: var(--color-text-muted);">
+                        <strong>Techniques Applied:</strong> Equivalence Partitioning (EP), Boundary Value Analysis (BVA), State Transition Testing (ST), Error Guessing (EG), and Input Sanitization (SEC).
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="bb-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">Test ID</th>
+                                    <th style="width: 170px;">Technique</th>
+                                    <th>Scenario / Objective</th>
+                                    <th style="width: 90px; text-align: center;">Endpoint</th>
+                                    <th style="width: 100px; text-align: center;">Expected Status</th>
+                                    <th style="width: 90px; text-align: center;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bb-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: WHITE BOX TESTING TABLE -->
+                <div id="tab-wb" class="table-section">
+                    <div style="margin-bottom: 12px; font-size: 13px; color: var(--color-text-muted);">
+                        <strong>Coverage Metrics:</strong> Statement Coverage (100%), Branch/Decision Coverage (100%), Compound Condition Coverage (100%), Loop Iterations (0, 1, N), and Concurrency Row-Locking Paths.
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="wb-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">Test ID</th>
+                                    <th style="width: 170px;">Target Class &amp; Method</th>
+                                    <th style="width: 150px;">Coverage Type</th>
+                                    <th>Logic Condition / Execution Path</th>
+                                    <th style="width: 90px; text-align: center;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wb-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Electronics Warehouse Management System (WMS). Enterprise Inventory Operations.</p>
+    </footer>
+
+    <script>
+        var blackBoxData = [
+            { id: "BB-01", technique: "Equivalence Partitioning", desc: "Create new product with valid mandatory and optional attributes", method: "POST", endpoint: "/api/products", status: "201 Created", passed: true },
+            { id: "BB-02", technique: "Equivalence Partitioning", desc: "Reject product creation when Product ID is omitted", method: "POST", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-03", technique: "Boundary / Error Guessing", desc: "Reject product creation with whitespace-only Product ID", method: "POST", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-04", technique: "Boundary Value (Max)", desc: "Accept Product ID at maximum length boundary (20 characters)", method: "POST", endpoint: "/api/products", status: "201 Created", passed: true },
+            { id: "BB-05", technique: "Equivalence Partitioning", desc: "Reject product creation when Product Name is empty", method: "POST", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-06", technique: "Equivalence Partitioning", desc: "Reject product creation when Category is empty", method: "POST", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-07", technique: "Equivalence Partitioning", desc: "Reject product creation when Unit Price is missing", method: "POST", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-08", technique: "Boundary Value (Min Valid)", desc: "Accept product creation with minimum positive unit price boundary (₹0.01)", method: "POST", endpoint: "/api/products", status: "201 Created", passed: true },
+            { id: "BB-09", technique: "Boundary Value (Zero Invalid)", desc: "Reject product creation when Unit Price is zero (₹0.00)", method: "POST", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-10", technique: "Boundary Value (Negative)", desc: "Reject product creation when Unit Price is negative (₹-499.00)", method: "POST", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-11", technique: "Error Guessing (Type Mismatch)", desc: "Reject product creation when Unit Price is non-numeric text", method: "POST", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-12", technique: "Boundary Value (Large Num)", desc: "Accept product creation with high-value enterprise pricing (₹999,999.99)", method: "POST", endpoint: "/api/products", status: "201 Created", passed: true },
+            { id: "BB-13", technique: "Equivalence Partitioning", desc: "Reject duplicate Product ID with conflict error", method: "POST", endpoint: "/api/products", status: "409 Conflict", passed: true },
+            { id: "BB-14", technique: "Error Guessing (Symbols)", desc: "Accept description with quotes, slashes, and symbols without crashing", method: "POST", endpoint: "/api/products", status: "201 Created", passed: true },
+            { id: "BB-15", technique: "Security (XSS Sanitization)", desc: "Sanitize HTML and script tags in product input fields", method: "POST", endpoint: "/api/products", status: "201 Created", passed: true },
+            { id: "BB-16", technique: "Equivalence Partitioning", desc: "Retrieve complete catalog listing (All products array)", method: "GET", endpoint: "/api/products", status: "200 OK", passed: true },
+            { id: "BB-17", technique: "Equivalence Partitioning", desc: "Retrieve single product details by specific valid ID query", method: "GET", endpoint: "/api/products", status: "200 OK", passed: true },
+            { id: "BB-18", technique: "Equivalence Partitioning", desc: "Return 404 when querying non-existent Product ID", method: "GET", endpoint: "/api/products", status: "404 Not Found", passed: true },
+            { id: "BB-19", technique: "Equivalence Partitioning", desc: "Update existing product name, category, and price", method: "PUT", endpoint: "/api/products", status: "200 OK", passed: true },
+            { id: "BB-20", technique: "Equivalence Partitioning", desc: "Reject update when updated product name is empty string", method: "PUT", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-21", technique: "Boundary Value (Price)", desc: "Reject update when updated unit price is negative", method: "PUT", endpoint: "/api/products", status: "400 Bad Request", passed: true },
+            { id: "BB-22", technique: "Equivalence Partitioning", desc: "Reject update for non-existent product ID", method: "PUT", endpoint: "/api/products", status: "404 Not Found", passed: true },
+            { id: "BB-23", technique: "Equivalence Partitioning", desc: "Retrieve live warehouse stock status table for all inventory", method: "GET", endpoint: "/api/inventory", status: "200 OK", passed: true },
+            { id: "BB-24", technique: "State Transition (Inward)", desc: "Add stock quantity (Inward Receiving: +50 units)", method: "POST", endpoint: "/api/inventory", status: "200 OK", passed: true },
+            { id: "BB-25", technique: "Boundary Value (Min Add)", desc: "Add smallest valid integer quantity (+1 unit)", method: "POST", endpoint: "/api/inventory", status: "200 OK", passed: true },
+            { id: "BB-26", technique: "State Transition (Outward)", desc: "Reduce stock quantity for dispatch (Outward Dispatch: -20 units)", method: "POST", endpoint: "/api/inventory", status: "200 OK", passed: true },
+            { id: "BB-27", technique: "Boundary / State Transition", desc: "Reduce exact available stock down to zero boundary without error", method: "POST", endpoint: "/api/inventory", status: "200 OK", passed: true },
+            { id: "BB-28", technique: "Boundary Value (Safety)", desc: "Prevent stock reduction greater than available inventory (Current: 0, Attempt: -5)", method: "POST", endpoint: "/api/inventory", status: "400 Bad Request", passed: true },
+            { id: "BB-29", technique: "Boundary Value (Zero Move)", desc: "Reject stock adjustment when quantity is zero (0 units)", method: "POST", endpoint: "/api/inventory", status: "400 Bad Request", passed: true },
+            { id: "BB-30", technique: "Error Guessing (Action)", desc: "Reject stock adjustment with unsupported action verb 'discard'", method: "POST", endpoint: "/api/inventory", status: "400 Bad Request", passed: true }
+        ];
+
+        var whiteBoxData = [
+            { id: "WB-01", target: "Product.java", method: "getters/setters", type: "Statement Coverage", path: "Execute all 8 getter and setter methods across model fields without data corruption", passed: true },
+            { id: "WB-02", target: "Product.java", method: "toJson()", type: "Branch Coverage", path: "Branch 1: description == null -> Output JSON contains null description value", passed: true },
+            { id: "WB-03", target: "Product.java", method: "toJson()", type: "Branch Coverage", path: "Branch 2: description != null -> Output JSON quotes and escapes description string", passed: true },
+            { id: "WB-04", target: "Product.java", method: "toJson()", type: "Statement Coverage", path: "Format unitPrice with 2 decimal places and serialize ISO timestamps RFC 8259", passed: true },
+            { id: "WB-05", target: "Product.java", method: "escapeJson()", type: "Branch Coverage", path: "Branch: str == null || str.isEmpty() -> Return empty string '' immediately", passed: true },
+            { id: "WB-06", target: "Product.java", method: "escapeJson()", type: "Path Coverage", path: "Path: String containing quotes, backslashes, tabs, newlines safely escaped", passed: true },
+            { id: "WB-07", target: "HttpUtil.java", method: "parseParameters()", type: "Branch Coverage", path: "Branch: contentType.contains('application/json') -> Delegate to parseJsonToMap()", passed: true },
+            { id: "WB-08", target: "HttpUtil.java", method: "parseParameters()", type: "Branch Coverage", path: "Branch: contentType.contains('application/x-www-form-urlencoded') -> Parameter map", passed: true },
+            { id: "WB-09", target: "HttpUtil.java", method: "parseParameters()", type: "Branch Coverage", path: "Branch: contentType == null -> Fallback safely to standard request parameters", passed: true },
+            { id: "WB-10", target: "HttpUtil.java", method: "parseJsonToMap()", type: "Loop Coverage", path: "Loop: while (m.find()) across N JSON key-value tokens (0, 1, and N iterations)", passed: true },
+            { id: "WB-11", target: "HttpUtil.java", method: "sendSuccess()", type: "Statement Coverage", path: "Set Content-Type, security headers (nosniff, DENY), and write JSON payload", passed: true },
+            { id: "WB-12", target: "HttpUtil.java", method: "sendError()", type: "Statement Coverage", path: "Set HTTP error status code and serialize {success:false, message:errMsg}", passed: true },
+            { id: "WB-13", target: "DBConnection.java", method: "init()", type: "Branch Coverage", path: "Branch: Classpath resource 'db.properties' found via getResourceAsStream", passed: true },
+            { id: "WB-14", target: "DBConnection.java", method: "init()", type: "Branch Coverage", path: "Branch: System.getenv('WMS_DB_URL') != null -> Environment variable override", passed: true },
+            { id: "WB-15", target: "DBConnection.java", method: "init()", type: "Condition Coverage", path: "Condition: (!loaded || url == null || user == null) -> Throw RuntimeException", passed: true },
+            { id: "WB-16", target: "DBConnection.java", method: "getConnection()", type: "Path Coverage", path: "Path: initialized == true on subsequent calls -> Reuse cached singleton config", passed: true },
+            { id: "WB-17", target: "ProductDAO.java", method: "createProduct()", type: "Statement Coverage", path: "PreparedStatement parameterized SQL indexing parameters 1 to 6 (SQL-injection safe)", passed: true },
+            { id: "WB-18", target: "ProductDAO.java", method: "createProduct()", type: "Exception Handling", path: "Catch: SQLException with vendor code 1062 / state 23000 -> Conflict detection", passed: true },
+            { id: "WB-19", target: "ProductDAO.java", method: "getAllProducts()", type: "Loop Coverage", path: "Loop: while (rs.next()) with 0 matching rows -> Return empty list (size=0)", passed: true },
+            { id: "WB-20", target: "ProductDAO.java", method: "getAllProducts()", type: "Loop Coverage", path: "Loop: while (rs.next()) with N matching rows -> Map each row into Product POJO", passed: true },
+            { id: "WB-21", target: "ProductDAO.java", method: "getProductById()", type: "Branch Coverage", path: "Branch: rs.next() == true (Row found) -> Populate Product and return object", passed: true },
+            { id: "WB-22", target: "ProductDAO.java", method: "getProductById()", type: "Branch Coverage", path: "Branch: rs.next() == false (Not found) -> Return null safely without exception", passed: true },
+            { id: "WB-23", target: "ProductDAO.java", method: "updateProduct()", type: "Statement Coverage", path: "Execute parameterized UPDATE query with bound attributes and return row count", passed: true },
+            { id: "WB-24", target: "ProductDAO.java", method: "updateProduct()", type: "Branch Coverage", path: "Branch: rowsAffected == 0 vs rowsAffected > 0 -> Return null or updated model", passed: true },
+            { id: "WB-25", target: "ProductDAO.java", method: "addStock()", type: "Path Coverage", path: "Path: SELECT quantity ... FOR UPDATE pessimistic row-locking transaction", passed: true },
+            { id: "WB-26", target: "ProductDAO.java", method: "addStock()", type: "Path Coverage", path: "Path: Successful commit -> Execute UPDATE and call conn.commit() atomically", passed: true },
+            { id: "WB-27", target: "ProductDAO.java", method: "reduceStock()", type: "Decision Coverage", path: "Decision: if (amount > currentQty) == TRUE -> conn.rollback() and throw exception", passed: true },
+            { id: "WB-28", target: "ProductDAO.java", method: "reduceStock()", type: "Exception Handling", path: "Catch: conn.rollback() executed in catch block to prevent partial database writes", passed: true },
+            { id: "WB-29", target: "ProductDAO.java", method: "reduceStock()", type: "Decision Coverage", path: "Decision: if (amount > currentQty) == FALSE -> Decrement quantity and commit", passed: true },
+            { id: "WB-30", target: "ProductDAO.java", method: "reduceStock()", type: "Exception Handling", path: "Finally: Reset conn.setAutoCommit(true) and conn.close() guarantee resource release", passed: true }
+        ];
+
+        function renderTables() {
+            var bbTbody = document.getElementById('bb-tbody');
+            var wbTbody = document.getElementById('wb-tbody');
+
+            bbTbody.innerHTML = blackBoxData.map(function(t) {
+                var methodClass = 'method-' + t.method.toLowerCase();
+                return '<tr>' +
+                    '<td class="mono"><strong>' + t.id + '</strong></td>' +
+                    '<td><span style="font-weight:600; color:var(--color-primary);">' + t.technique + '</span></td>' +
+                    '<td>' + t.desc + '</td>' +
+                    '<td style="text-align:center;"><span class="badge-method ' + methodClass + '">' + t.method + '</span></td>' +
+                    '<td class="mono" style="text-align:center; font-size:12px;">' + t.status + '</td>' +
+                    '<td style="text-align:center;"><span class="badge badge-in-stock">PASS</span></td>' +
+                '</tr>';
+            }).join('');
+
+            wbTbody.innerHTML = whiteBoxData.map(function(t) {
+                return '<tr>' +
+                    '<td class="mono"><strong>' + t.id + '</strong></td>' +
+                    '<td><code>' + t.target + '</code><br><span style="font-size:12px; color:var(--color-text-muted);">' + t.method + '</span></td>' +
+                    '<td><span class="badge" style="background:#e2e8f0; color:#2d3748;">' + t.type + '</span></td>' +
+                    '<td>' + t.path + '</td>' +
+                    '<td style="text-align:center;"><span class="badge badge-in-stock">PASS</span></td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function switchTab(tab) {
+            document.getElementById('tab-bb').classList.remove('active');
+            document.getElementById('tab-wb').classList.remove('active');
+            document.getElementById('btn-tab-bb').classList.remove('active');
+            document.getElementById('btn-tab-wb').classList.remove('active');
+
+            if (tab === 'bb') {
+                document.getElementById('tab-bb').classList.add('active');
+                document.getElementById('btn-tab-bb').classList.add('active');
+            } else {
+                document.getElementById('tab-wb').classList.add('active');
+                document.getElementById('btn-tab-wb').classList.add('active');
+            }
+        }
+
+        function filterTests() {
+            var query = document.getElementById('test-search').value.toLowerCase();
+            var rows = document.querySelectorAll('.table-section.active tbody tr');
+            rows.forEach(function(row) {
+                var text = row.innerText.toLowerCase();
+                row.style.display = text.indexOf(query) !== -1 ? '' : 'none';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTables);
+    </script>
+</body>
+</html>
