@@ -2,12 +2,12 @@
 
 $ErrorActionPreference = "Stop"
 
-$ProjectRoot = "c:\Users\vidhi\OneDrive\Desktop\Jira project"
-$TomcatHome  = "C:\apache-tomcat-9.0.97"
-$JavaHome    = "C:\Program Files\Eclipse Adoptium\jdk-17.0.20.101-hotspot"
+$ProjectRoot = $PSScriptRoot
+$TomcatHome  = if ($env:CATALINA_HOME) { $env:CATALINA_HOME } else { "C:\apache-tomcat-9.0.97" }
+$JavaHome    = if ($env:JAVA_HOME) { $env:JAVA_HOME } else { "C:\Program Files\Eclipse Adoptium\jdk-17.0.20.101-hotspot" }
 
-$Javac = "$JavaHome\bin\javac.exe"
-$Jar   = "$JavaHome\bin\jar.exe"
+$Javac = if (Get-Command javac -ErrorAction SilentlyContinue) { "javac" } else { "$JavaHome\bin\javac.exe" }
+$Jar   = if (Get-Command jar -ErrorAction SilentlyContinue) { "jar" } else { "$JavaHome\bin\jar.exe" }
 
 Write-Host "=================================================" -ForegroundColor Cyan
 Write-Host "   BUILDING WAREHOUSE MANAGEMENT SYSTEM (WMS)   " -ForegroundColor Cyan

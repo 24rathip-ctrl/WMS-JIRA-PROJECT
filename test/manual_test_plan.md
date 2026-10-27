@@ -1,21 +1,26 @@
-# WMS Manual Test Plan & Execution Evidence (SCRUM-11)
+# Electronics WMS Test Plan & Execution Evidence (SCRUM-11)
 
-**Project:** Warehouse Management System (WMS)  
-**Execution Date:** 2026-10-19  
-**Execution Environment:** Apache Tomcat 9.0.97, MySQL 8.4, Java 17  
-**Test Suite Type:** Functional, Boundary, Security, and Edge Case  
-**Overall Status:** **100% PASSED (22 / 22 Scenarios)**
+**Project:** Electronics Warehouse Management System (WMS)  
+**Execution Date:** 2026-10-27  
+**Execution Environment:** Apache Tomcat 9.0, MySQL 8.4, Java 17  
+**Test Suite Type:** Black Box Testing (30 Tests) & White Box Testing (30 Tests)  
+**Overall Status:** **100% PASSED (60 / 60 Scenarios)**
 
 ---
 
 ## 1. Test Execution Summary
 
-| Module | Jira Reference | Test Cases | Passed | Failed | Status |
+| Test Category | Methodology & Jira Reference | Total Cases | Passed | Failed | Status |
 |---|---|---|---|---|---|
-| **Product Management (Add & List)** | SCRUM-8 | TC-01 to TC-10 (10) | 10 | 0 | **PASS** |
-| **Product Management (Update)** | SCRUM-9 | TC-11 to TC-14 (4) | 4 | 0 | **PASS** |
-| **Inventory Management (Stock Ops)** | SCRUM-10 | TC-15 to TC-22 (8) | 8 | 0 | **PASS** |
-| **Total** | **SCRUM-11** | **22** | **22** | **0** | **PASS** |
+| **Black Box Testing** | Specification, EP, BVA, State Transition (`SCRUM-8, 9, 10`) | **30** | 30 | 0 | **PASS (100%)** |
+| **White Box Testing** | Statement, Branch, Condition, Loop, Path (`SCRUM-11`) | **30** | 30 | 0 | **PASS (100%)** |
+| **Combined Total** | **SCRUM-11 Verification Suite** | **60** | **60** | **0** | **PASS (100%)** |
+
+> Complete test specifications:
+> - Black Box Specifications & State Models: [`test/black_box_tests.md`](black_box_tests.md)
+> - White Box Control Flow Graphs & Branch Coverage: [`test/white_box_tests.md`](white_box_tests.md)
+> - Exported Results: [`test/black_box_results.csv`](black_box_results.csv) & [`test/white_box_results.csv`](white_box_results.csv)
+> - Interactive Execution Runner: `powershell -ExecutionPolicy Bypass -File test/run_all_tests.ps1`
 
 ---
 

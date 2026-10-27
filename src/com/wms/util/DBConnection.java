@@ -42,8 +42,7 @@ public class DBConnection {
             String[] candidatePaths = {
                 System.getProperty("wms.config", ""),
                 "config/db.properties",
-                "../config/db.properties",
-                "c:/Users/vidhi/OneDrive/Desktop/Jira project/config/db.properties"
+                "../config/db.properties"
             };
 
             for (String path : candidatePaths) {
