@@ -1,0 +1,82 @@
+Sr. No.,Test Case ID,Test Scenario,Test Data,Preconditions,Test Steps,Expected Result,Actual Result,Status
+1,TC_001,Login with correct details,"Username: admin
+Password: 1234",Login page is available,"1. Open login page
+2. Enter username
+3. Enter password
+4. Click Login",Dashboard should open.,Dashboard opened successfully.,PASS
+2,TC_002,Login with wrong password,"Username: admin
+Password: 1111",Login page is available,"1. Enter username
+2. Enter wrong password
+3. Click Login",Error message should be shown.,Error message was shown.,PASS
+3,TC_003,Add a new product,"Product: Laptop
+Product ID: WMS-101
+Qty: 25",User is logged in,"1. Open Inventory
+2. Click Add Product
+3. Enter details
+4. Click Save",Product should be added.,Product was added.,PASS
+4,TC_004,Add product with empty name,"Product Name: blank
+Product ID: WMS-102",Add Product page is open,"1. Leave product name blank
+2. Enter Product ID
+3. Click Save",System should ask for product name.,Product name message was shown.,PASS
+5,TC_005,Add product with empty Product ID,"Product ID: blank
+Name: iPhone 16 Pro",Add Product page is open,"1. Leave Product ID empty
+2. Enter name
+3. Click Save",System should ask for Product ID.,Product ID required message was shown.,PASS
+6,TC_006,Add product with duplicate ID,"Product ID: WMS-101
+(Already exists)",WMS-101 already exists,"1. Enter existing Product ID WMS-101
+2. Click Save",Duplicate Product ID should not be accepted.,Duplicate Product ID message was shown.,PASS
+7,TC_007,Add product with negative price,"Price: -500
+Product ID: WMS-103",Add Product page is open,"1. Enter price -500
+2. Click Save",Negative price should not be accepted.,Invalid price error was shown.,PASS
+8,TC_008,Add product with zero price,"Price: 0
+Product ID: WMS-104",Add Product page is open,"1. Enter price 0
+2. Click Save",Price should be greater than zero.,Zero price error was shown.,PASS
+9,TC_009,Add product with decimal price,"Price: 99.50
+Product ID: WMS-105",Add Product page is open,"1. Enter price 99.50
+2. Click Save",Product should be saved with decimal price.,Product saved with decimal price.,PASS
+10,TC_010,Add product with text in price,"Price: abc
+Product ID: WMS-106",Add Product page is open,"1. Enter 'abc' in price
+2. Click Save",System should ask for numeric price.,Numeric price error was shown.,PASS
+11,TC_011,Add product with empty category,Category: blank,Add Product page is open,"1. Leave category empty
+2. Click Save",System should ask to select category.,Category required message was shown.,PASS
+12,TC_012,Add product with special characters in name,"Name: 65"" OLED TV & Stand",Add Product page is open,"1. Enter special characters
+2. Click Save",Product should save without crash.,Product saved properly.,PASS
+13,TC_013,View complete products list,None,Products page is open,1. Open Products tab,All products should be listed in table.,All products displayed in table.,PASS
+14,TC_014,Search product by name,Search: MacBook,Products page is open,"1. Type 'MacBook' in search
+2. Press Enter",Only MacBook products should show.,Matching products filtered correctly.,PASS
+15,TC_015,Filter products by category,Category: Audio & Speakers,Products page is open,1. Select category Audio,Only audio items should show.,Audio items displayed correctly.,PASS
+16,TC_016,Edit product details,"Product ID: WMS-101
+New Price: 189900",Product exists,"1. Click Edit
+2. Update price
+3. Click Save",Product price should be updated.,Product price was updated.,PASS
+17,TC_017,Edit product with empty name,Name: blank,Edit modal is open,"1. Clear name field
+2. Click Save",System should reject empty name.,Name validation error shown.,PASS
+18,TC_018,Add stock quantity (Inward),"Product: WMS-101
+Quantity: 10",Stock is 25,"1. Open Inventory
+2. Enter quantity 10
+3. Click Add Stock",Stock should increase to 35.,Stock increased to 35.,PASS
+19,TC_019,Add smallest stock (+1 unit),"Product: WMS-101
+Quantity: 1",Stock is 35,"1. Enter quantity 1
+2. Click Add Stock",Stock should increase by 1.,Stock increased by 1.,PASS
+20,TC_020,Add stock with zero quantity,Quantity: 0,Inventory page is open,"1. Enter quantity 0
+2. Click Add Stock",Quantity must be greater than zero.,Error message was shown.,PASS
+21,TC_021,Add stock with negative quantity,Quantity: -5,Inventory page is open,"1. Enter quantity -5
+2. Click Add Stock",Negative quantity should be rejected.,Negative quantity was rejected.,PASS
+22,TC_022,Reduce stock (Outward dispatch),"Product: WMS-101
+Quantity: 5",Stock is 36,"1. Open Inventory
+2. Enter quantity 5
+3. Click Reduce Stock",Stock should decrease to 31.,Stock decreased to 31.,PASS
+23,TC_023,Reduce stock more than available,"Stock: 10
+Quantity: 50",Current stock is 10,"1. Enter quantity 50
+2. Click Reduce Stock",Insufficient stock error should show.,Insufficient stock error was shown.,PASS
+24,TC_024,Reduce stock to zero exactly,"Stock: 5
+Quantity: 5",Current stock is 5,"1. Enter quantity 5
+2. Click Reduce Stock",Stock should become 0 with Out of Stock badge.,Stock became 0 and status updated.,PASS
+25,TC_025,Reduce stock when already zero,"Stock: 0
+Quantity: 1",Item is Out of Stock,1. Try to reduce stock,Reduction should be blocked.,Reduction was blocked.,PASS
+26,TC_026,Check Low Stock badge display,"Stock: 12
+(Threshold: 15)",Stock is 12,1. Check Inventory table,Low Stock badge should be shown.,Low Stock badge was shown.,PASS
+27,TC_027,Check In Stock badge display,Stock: 40,Stock is 40,1. Check Inventory table,In Stock badge should be shown.,In Stock badge was shown.,PASS
+28,TC_028,Dashboard total valuation calculation,Products in database,Dashboard is open,1. View total valuation card,Total stock value in Rupees should calculate correctly.,Total value calculated correctly.,PASS
+29,TC_029,Concurrent stock updates,Two users update stock,Item exists,1. Submit two updates together,Row lock should prevent data loss.,Both updates saved accurately.,PASS
+30,TC_030,Refresh page data persistence,None,Stock was modified,1. Refresh browser with F5,Updated values should stay saved.,Updated values stayed saved.,PASS

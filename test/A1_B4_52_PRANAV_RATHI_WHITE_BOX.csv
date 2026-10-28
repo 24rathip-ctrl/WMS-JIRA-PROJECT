@@ -1,0 +1,62 @@
+Sr. No.,Test Case ID,Test Scenario,Test Data,Preconditions,Test Steps,Expected Result,Actual Result,Status
+1,WB_001,Test Product model getters and setters,"Product.java
+getters/setters",Valid model fields,"1. Set field values
+2. Call getters",Values should be preserved without corruption.,Values preserved correctly.,PASS
+2,WB_002,Test toJson() with null description,"Product.java
+toJson()",description == null,1. Pass product with null description to toJson(),JSON should contain null description without exception.,JSON rendered safely.,PASS
+3,WB_003,Test toJson() with valid description,"Product.java
+toJson()",description != null,1. Pass valid description to toJson(),Description should be quoted in JSON.,Description quoted properly.,PASS
+4,WB_004,Test escapeJson() with null string,"Product.java
+escapeJson()",str == null,1. Call escapeJson(null),Should return empty string immediately.,Empty string returned.,PASS
+5,WB_005,Test escapeJson() with double quotes,"Product.java
+escapeJson()","str = '16"" Laptop'",1. Pass string with quotes,"Quotes should be escaped to \"".",Quotes escaped properly.,PASS
+6,WB_006,Test escapeJson() with backslash,"Product.java
+escapeJson()",str = 'Path\\Item',1. Pass string with backslash,Backslash should be escaped to \\\\.,Backslash escaped properly.,PASS
+7,WB_007,Test price decimal formatting,"Product.java
+toJson()",unitPrice = 1499.5,1. Call toJson(),Price should format with 2 decimals.,Price formatted with 2 decimals.,PASS
+8,WB_008,Test UTF-8 JSON response headers,"HttpUtil.java
+sendJson()",HttpServletResponse,1. Call sendJson(),Header should be application/json;charset=UTF-8.,Header set correctly.,PASS
+9,WB_009,Test error JSON schema format,"HttpUtil.java
+sendError()",statusCode = 400,1. Call sendError(),JSON should contain success:false and message.,Error JSON generated.,PASS
+10,WB_010,Test readRequestBody() with valid body,"HttpUtil.java
+readRequestBody()",InputStream with JSON,1. Read JSON stream,Should return complete body string.,Body string returned.,PASS
+11,WB_011,Test readRequestBody() with empty body,"HttpUtil.java
+readRequestBody()",Empty stream,1. Read empty stream,Should return empty string safely.,Empty string returned.,PASS
+12,WB_012,Test parseParameters() URL-encoded form,"HttpUtil.java
+parseParameters()",action=add&qty=5,1. Parse query string,Map should contain key-value pairs.,Map parsed properly.,PASS
+13,WB_013,Test DBConnection environment variable URL,"DBConnection.java
+init()",WMS_DB_URL set,1. Check env variable,Connection should use environment URL.,Environment URL used.,PASS
+14,WB_014,Test DBConnection properties fallback,"DBConnection.java
+init()",db.properties file,1. Check properties file,Should read from db.properties.,Read from properties file.,PASS
+15,WB_015,Test DBConnection missing config check,"DBConnection.java
+init()",url == null,1. Initialize without config,Should throw RuntimeException.,RuntimeException thrown.,PASS
+16,WB_016,Test DBConnection singleton caching,"DBConnection.java
+getConnection()",initialized == true,1. Call getConnection() twice,Should reuse cached configuration.,Cached config reused.,PASS
+17,WB_017,Test createProduct() SQL parameter binding,"ProductDAO.java
+createProduct()",PreparedStatement,1. Bind parameters 1 to 6,SQL parameters should bind safely without injection.,Parameters bound safely.,PASS
+18,WB_018,Test createProduct() duplicate key handling,"ProductDAO.java
+createProduct()",Vendor code 1062,1. Insert duplicate ID,Should catch error 1062 and throw conflict.,Duplicate key caught.,PASS
+19,WB_019,Test getAllProducts() with empty table,"ProductDAO.java
+getAllProducts()",rs.next() == false,1. Query empty table,Should return empty list with size 0.,Empty list returned.,PASS
+20,WB_020,Test getAllProducts() loop iteration,"ProductDAO.java
+getAllProducts()",rs.next() == true,1. Loop through cursor,All rows should map into Product objects.,All rows mapped properly.,PASS
+21,WB_021,Test getProductById() row found,"ProductDAO.java
+getProductById()",Row found in DB,1. Query valid ID,Should return populated Product object.,Populated object returned.,PASS
+22,WB_022,Test getProductById() row not found,"ProductDAO.java
+getProductById()",Row not found,1. Query unknown ID,Should return null safely.,Null returned safely.,PASS
+23,WB_023,Test updateProduct() SQL execution,"ProductDAO.java
+updateProduct()",UPDATE query,1. Execute update,Row count should be returned.,Row count returned.,PASS
+24,WB_024,Test updateProduct() 0 rows affected,"ProductDAO.java
+updateProduct()",rowsAffected == 0,1. Update non-existent SKU,Should return null.,Null returned.,PASS
+25,WB_025,Test addStock() row locking query,"ProductDAO.java
+addStock()",SELECT ... FOR UPDATE,1. Execute query,Pessimistic row lock should be placed.,Row lock acquired.,PASS
+26,WB_026,Test addStock() commit execution,"ProductDAO.java
+addStock()",conn.commit(),1. Increment quantity,Transaction should commit atomically.,Transaction committed.,PASS
+27,WB_027,Test reduceStock() over-reduction check,"ProductDAO.java
+reduceStock()",amount > currentQty,1. Try to reduce excess quantity,Should call conn.rollback() and throw exception.,Rollback executed safely.,PASS
+28,WB_028,Test reduceStock() rollback in catch,"ProductDAO.java
+reduceStock()",SQLException occurs,1. Trigger database error,Catch block should call conn.rollback().,Rollback called in catch.,PASS
+29,WB_029,Test reduceStock() normal reduction,"ProductDAO.java
+reduceStock()",amount <= currentQty,1. Reduce valid quantity,Quantity should decrement and commit.,Decremented and committed.,PASS
+30,WB_030,Test connection close in finally block,"ProductDAO.java
+reduceStock()",finally block,1. Complete execution,Connection must be closed in finally block.,Connection closed in finally.,PASS
