@@ -92,13 +92,13 @@ function renderTables() {
             '<td><span style="font-weight:600; color:var(--color-primary);">' + escapeHtml(t.technique) + '</span>' + customBadge + '</td>' +
             '<td>' + escapeHtml(t.desc) + '</td>' +
             '<td style="text-align:center;"><span class="badge-method ' + methodClass + '">' + escapeHtml(t.method) + '</span></td>' +
-            '<td class="mono" style="text-align:center; font-size:12px;">' + escapeHtml(t.status) + '</td>' +
             '<td style="text-align:center;"><span class="badge badge-in-stock">PASS</span></td>' +
         '</tr>' +
         '<tr id="detail-bb-' + idx + '" class="detail-row">' +
-            '<td colspan="6">' +
+            '<td colspan="5">' +
                 '<div class="detail-card">' +
                     '<div><strong>Verification Objective:</strong> ' + escapeHtml(t.desc) + '</div>' +
+                    '<div><strong>Expected Status:</strong> <code>' + escapeHtml(t.status) + '</code></div>' +
                     '<div><strong>Test Payload:</strong> <code>' + escapeHtml(t.payload) + '</code></div>' +
                     '<div><strong>Architecture Verification:</strong> ' + escapeHtml(t.detail) + '</div>' +
                 '</div>' +
