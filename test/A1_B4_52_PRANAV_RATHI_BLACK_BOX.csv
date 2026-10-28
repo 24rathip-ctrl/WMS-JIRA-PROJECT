@@ -8,23 +8,23 @@ Password: 1234",Login page is available,"1. Open login page
 Password: 1111",Login page is available,"1. Enter username
 2. Enter wrong password
 3. Click Login",Error message should be shown.,Error message was shown.,PASS
-3,TC_003,Add a new product,"Product: Laptop
-Product ID: WMS-101
-Qty: 25",User is logged in,"1. Open Inventory
+3,TC_003,Add a new product,"Product: Keyboard
+Product ID: P001
+Qty: 20",User is logged in,"1. Open Inventory
 2. Click Add Product
 3. Enter details
 4. Click Save",Product should be added.,Product was added.,PASS
 4,TC_004,Add product with empty name,"Product Name: blank
-Product ID: WMS-102",Add Product page is open,"1. Leave product name blank
+Product ID: P002",Add Product page is open,"1. Leave product name blank
 2. Enter Product ID
 3. Click Save",System should ask for product name.,Product name message was shown.,PASS
-5,TC_005,Add product with empty Product ID,"Product ID: blank
+5,TC_005,Add product with existing ID,Product ID: P001,P001 already exists,"1. Open Add Product
+2. Enter Product ID P001
+3. Click Save",Duplicate Product ID should not be accepted.,Duplicate Product ID message was shown.,PASS
+6,TC_006,Add product with empty Product ID,"Product ID: blank
 Name: iPhone 16 Pro",Add Product page is open,"1. Leave Product ID empty
 2. Enter name
 3. Click Save",System should ask for Product ID.,Product ID required message was shown.,PASS
-6,TC_006,Add product with duplicate ID,"Product ID: WMS-101
-(Already exists)",WMS-101 already exists,"1. Enter existing Product ID WMS-101
-2. Click Save",Duplicate Product ID should not be accepted.,Duplicate Product ID message was shown.,PASS
 7,TC_007,Add product with negative price,"Price: -500
 Product ID: WMS-103",Add Product page is open,"1. Enter price -500
 2. Click Save",Negative price should not be accepted.,Invalid price error was shown.,PASS

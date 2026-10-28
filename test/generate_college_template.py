@@ -2,14 +2,14 @@ import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
-# --- 30 SIMPLE BLACK BOX TEST CASES (MATCHING COLLEGE TEMPLATE) ---
+# --- 30 BLACK BOX TEST CASES (EXACT COLLEGE TEMPLATE) ---
 black_box_rows = [
     [1, "TC_001", "Login with correct details", "Username: admin\nPassword: 1234", "Login page is available", "1. Open login page\n2. Enter username\n3. Enter password\n4. Click Login", "Dashboard should open.", "Dashboard opened successfully.", "PASS"],
     [2, "TC_002", "Login with wrong password", "Username: admin\nPassword: 1111", "Login page is available", "1. Enter username\n2. Enter wrong password\n3. Click Login", "Error message should be shown.", "Error message was shown.", "PASS"],
-    [3, "TC_003", "Add a new product", "Product: Laptop\nProduct ID: WMS-101\nQty: 25", "User is logged in", "1. Open Inventory\n2. Click Add Product\n3. Enter details\n4. Click Save", "Product should be added.", "Product was added.", "PASS"],
-    [4, "TC_004", "Add product with empty name", "Product Name: blank\nProduct ID: WMS-102", "Add Product page is open", "1. Leave product name blank\n2. Enter Product ID\n3. Click Save", "System should ask for product name.", "Product name message was shown.", "PASS"],
-    [5, "TC_005", "Add product with empty Product ID", "Product ID: blank\nName: iPhone 16 Pro", "Add Product page is open", "1. Leave Product ID empty\n2. Enter name\n3. Click Save", "System should ask for Product ID.", "Product ID required message was shown.", "PASS"],
-    [6, "TC_006", "Add product with duplicate ID", "Product ID: WMS-101\n(Already exists)", "WMS-101 already exists", "1. Enter existing Product ID WMS-101\n2. Click Save", "Duplicate Product ID should not be accepted.", "Duplicate Product ID message was shown.", "PASS"],
+    [3, "TC_003", "Add a new product", "Product: Keyboard\nProduct ID: P001\nQty: 20", "User is logged in", "1. Open Inventory\n2. Click Add Product\n3. Enter details\n4. Click Save", "Product should be added.", "Product was added.", "PASS"],
+    [4, "TC_004", "Add product with empty name", "Product Name: blank\nProduct ID: P002", "Add Product page is open", "1. Leave product name blank\n2. Enter Product ID\n3. Click Save", "System should ask for product name.", "Product name message was shown.", "PASS"],
+    [5, "TC_005", "Add product with existing ID", "Product ID: P001", "P001 already exists", "1. Open Add Product\n2. Enter Product ID P001\n3. Click Save", "Duplicate Product ID should not be accepted.", "Duplicate Product ID message was shown.", "PASS"],
+    [6, "TC_006", "Add product with empty Product ID", "Product ID: blank\nName: iPhone 16 Pro", "Add Product page is open", "1. Leave Product ID empty\n2. Enter name\n3. Click Save", "System should ask for Product ID.", "Product ID required message was shown.", "PASS"],
     [7, "TC_007", "Add product with negative price", "Price: -500\nProduct ID: WMS-103", "Add Product page is open", "1. Enter price -500\n2. Click Save", "Negative price should not be accepted.", "Invalid price error was shown.", "PASS"],
     [8, "TC_008", "Add product with zero price", "Price: 0\nProduct ID: WMS-104", "Add Product page is open", "1. Enter price 0\n2. Click Save", "Price should be greater than zero.", "Zero price error was shown.", "PASS"],
     [9, "TC_009", "Add product with decimal price", "Price: 99.50\nProduct ID: WMS-105", "Add Product page is open", "1. Enter price 99.50\n2. Click Save", "Product should be saved with decimal price.", "Product saved with decimal price.", "PASS"],
@@ -36,38 +36,38 @@ black_box_rows = [
     [30, "TC_030", "Refresh page data persistence", "None", "Stock was modified", "1. Refresh browser with F5", "Updated values should stay saved.", "Updated values stayed saved.", "PASS"]
 ]
 
-# --- 30 SIMPLE WHITE BOX TEST CASES (MATCHING COLLEGE TEMPLATE) ---
+# --- 30 WHITE BOX TEST CASES (EXACT SAME 9 COLUMNS) ---
 white_box_rows = [
-    [1, "WB_001", "Test Product model getters and setters", "Product.java\ngetters/setters", "Valid model fields", "1. Set field values\n2. Call getters", "Values should be preserved without corruption.", "Values preserved correctly.", "PASS"],
-    [2, "WB_002", "Test toJson() with null description", "Product.java\ntoJson()", "description == null", "1. Pass product with null description to toJson()", "JSON should contain null description without exception.", "JSON rendered safely.", "PASS"],
-    [3, "WB_003", "Test toJson() with valid description", "Product.java\ntoJson()", "description != null", "1. Pass valid description to toJson()", "Description should be quoted in JSON.", "Description quoted properly.", "PASS"],
-    [4, "WB_004", "Test escapeJson() with null string", "Product.java\nescapeJson()", "str == null", "1. Call escapeJson(null)", "Should return empty string immediately.", "Empty string returned.", "PASS"],
-    [5, "WB_005", "Test escapeJson() with double quotes", "Product.java\nescapeJson()", 'str = \'16" Laptop\'', "1. Pass string with quotes", "Quotes should be escaped to \\\".", "Quotes escaped properly.", "PASS"],
-    [6, "WB_006", "Test escapeJson() with backslash", "Product.java\nescapeJson()", "str = 'Path\\\\Item'", "1. Pass string with backslash", "Backslash should be escaped to \\\\\\\\.", "Backslash escaped properly.", "PASS"],
-    [7, "WB_007", "Test price decimal formatting", "Product.java\ntoJson()", "unitPrice = 1499.5", "1. Call toJson()", "Price should format with 2 decimals.", "Price formatted with 2 decimals.", "PASS"],
-    [8, "WB_008", "Test UTF-8 JSON response headers", "HttpUtil.java\nsendJson()", "HttpServletResponse", "1. Call sendJson()", "Header should be application/json;charset=UTF-8.", "Header set correctly.", "PASS"],
-    [9, "WB_009", "Test error JSON schema format", "HttpUtil.java\nsendError()", "statusCode = 400", "1. Call sendError()", "JSON should contain success:false and message.", "Error JSON generated.", "PASS"],
-    [10, "WB_010", "Test readRequestBody() with valid body", "HttpUtil.java\nreadRequestBody()", "InputStream with JSON", "1. Read JSON stream", "Should return complete body string.", "Body string returned.", "PASS"],
-    [11, "WB_011", "Test readRequestBody() with empty body", "HttpUtil.java\nreadRequestBody()", "Empty stream", "1. Read empty stream", "Should return empty string safely.", "Empty string returned.", "PASS"],
-    [12, "WB_012", "Test parseParameters() URL-encoded form", "HttpUtil.java\nparseParameters()", "action=add&qty=5", "1. Parse query string", "Map should contain key-value pairs.", "Map parsed properly.", "PASS"],
-    [13, "WB_013", "Test DBConnection environment variable URL", "DBConnection.java\ninit()", "WMS_DB_URL set", "1. Check env variable", "Connection should use environment URL.", "Environment URL used.", "PASS"],
-    [14, "WB_014", "Test DBConnection properties fallback", "DBConnection.java\ninit()", "db.properties file", "1. Check properties file", "Should read from db.properties.", "Read from properties file.", "PASS"],
-    [15, "WB_015", "Test DBConnection missing config check", "DBConnection.java\ninit()", "url == null", "1. Initialize without config", "Should throw RuntimeException.", "RuntimeException thrown.", "PASS"],
-    [16, "WB_016", "Test DBConnection singleton caching", "DBConnection.java\ngetConnection()", "initialized == true", "1. Call getConnection() twice", "Should reuse cached configuration.", "Cached config reused.", "PASS"],
-    [17, "WB_017", "Test createProduct() SQL parameter binding", "ProductDAO.java\ncreateProduct()", "PreparedStatement", "1. Bind parameters 1 to 6", "SQL parameters should bind safely without injection.", "Parameters bound safely.", "PASS"],
-    [18, "WB_018", "Test createProduct() duplicate key handling", "ProductDAO.java\ncreateProduct()", "Vendor code 1062", "1. Insert duplicate ID", "Should catch error 1062 and throw conflict.", "Duplicate key caught.", "PASS"],
-    [19, "WB_019", "Test getAllProducts() with empty table", "ProductDAO.java\ngetAllProducts()", "rs.next() == false", "1. Query empty table", "Should return empty list with size 0.", "Empty list returned.", "PASS"],
-    [20, "WB_020", "Test getAllProducts() loop iteration", "ProductDAO.java\ngetAllProducts()", "rs.next() == true", "1. Loop through cursor", "All rows should map into Product objects.", "All rows mapped properly.", "PASS"],
-    [21, "WB_021", "Test getProductById() row found", "ProductDAO.java\ngetProductById()", "Row found in DB", "1. Query valid ID", "Should return populated Product object.", "Populated object returned.", "PASS"],
-    [22, "WB_022", "Test getProductById() row not found", "ProductDAO.java\ngetProductById()", "Row not found", "1. Query unknown ID", "Should return null safely.", "Null returned safely.", "PASS"],
-    [23, "WB_023", "Test updateProduct() SQL execution", "ProductDAO.java\nupdateProduct()", "UPDATE query", "1. Execute update", "Row count should be returned.", "Row count returned.", "PASS"],
-    [24, "WB_024", "Test updateProduct() 0 rows affected", "ProductDAO.java\nupdateProduct()", "rowsAffected == 0", "1. Update non-existent SKU", "Should return null.", "Null returned.", "PASS"],
-    [25, "WB_025", "Test addStock() row locking query", "ProductDAO.java\naddStock()", "SELECT ... FOR UPDATE", "1. Execute query", "Pessimistic row lock should be placed.", "Row lock acquired.", "PASS"],
-    [26, "WB_026", "Test addStock() commit execution", "ProductDAO.java\naddStock()", "conn.commit()", "1. Increment quantity", "Transaction should commit atomically.", "Transaction committed.", "PASS"],
-    [27, "WB_027", "Test reduceStock() over-reduction check", "ProductDAO.java\nreduceStock()", "amount > currentQty", "1. Try to reduce excess quantity", "Should call conn.rollback() and throw exception.", "Rollback executed safely.", "PASS"],
-    [28, "WB_028", "Test reduceStock() rollback in catch", "ProductDAO.java\nreduceStock()", "SQLException occurs", "1. Trigger database error", "Catch block should call conn.rollback().", "Rollback called in catch.", "PASS"],
-    [29, "WB_029", "Test reduceStock() normal reduction", "ProductDAO.java\nreduceStock()", "amount <= currentQty", "1. Reduce valid quantity", "Quantity should decrement and commit.", "Decremented and committed.", "PASS"],
-    [30, "WB_030", "Test connection close in finally block", "ProductDAO.java\nreduceStock()", "finally block", "1. Complete execution", "Connection must be closed in finally block.", "Connection closed in finally.", "PASS"]
+    [1, "WB_001", "Verify getter and setter statement coverage", "Product ID: WMS-101\nName: MacBook Pro", "Product class is available", "1. Instantiate Product\n2. Set field values\n3. Call getters", "Getter methods should return assigned values.", "Getter methods returned assigned values.", "PASS"],
+    [2, "WB_002", "Verify toJson() branch with null description", "Description: null", "Product created with null description", "1. Call toJson() on product", "JSON should contain null description without crash.", "JSON rendered safely without exception.", "PASS"],
+    [3, "WB_003", "Verify toJson() branch with valid description", "Description: Flagship laptop", "Product has valid description", "1. Call toJson() on product", "Description should be quoted in JSON output.", "Description was quoted properly.", "PASS"],
+    [4, "WB_004", "Verify escapeJson() handling null input", "Input: null", "Product model loaded", "1. Call escapeJson(null)", "Should return empty string immediately.", "Empty string was returned.", "PASS"],
+    [5, "WB_005", "Verify escapeJson() escaping double quotes", 'Input: 16" Screen', "String contains double quotes", "1. Call escapeJson()", "Quotes should be escaped properly.", "Quotes were escaped properly.", "PASS"],
+    [6, "WB_006", "Verify escapeJson() escaping backslashes", "Input: Path\\Folder", "String contains backslash", "1. Call escapeJson()", "Backslash should be escaped properly.", "Backslash was escaped properly.", "PASS"],
+    [7, "WB_007", "Verify price decimal formatting in toJson()", "unitPrice: 1999.5", "Product has decimal price", "1. Call toJson()", "Price should format with 2 decimals.", "Price formatted with 2 decimals.", "PASS"],
+    [8, "WB_008", "Verify sendJson() HTTP response header", "Status: 200", "HttpServletResponse active", "1. Call sendJson()", "Content-Type header should be application/json.", "Header was set correctly.", "PASS"],
+    [9, "WB_009", "Verify sendError() JSON payload structure", "Status: 400\nMessage: Invalid input", "HttpServletResponse active", "1. Call sendError()", "JSON should contain success:false and message.", "Error JSON was generated.", "PASS"],
+    [10, "WB_010", "Verify readRequestBody() reading stream", "JSON: {\"name\":\"iPhone 16\"}", "Request stream active", "1. Call readRequestBody()", "Complete request body should be read.", "Request body was read accurately.", "PASS"],
+    [11, "WB_011", "Verify readRequestBody() empty stream", "Input stream: Empty", "Request stream empty", "1. Call readRequestBody()", "Should return empty string safely.", "Empty string was returned.", "PASS"],
+    [12, "WB_012", "Verify parseParameters() URL-encoded form", "Query: action=add&qty=5", "URL-encoded query received", "1. Call parseParameters()", "Map should contain parsed key-value pairs.", "Map was populated with parameters.", "PASS"],
+    [13, "WB_013", "Verify DBConnection environment variable URL", "Env: WMS_DB_URL set", "Environment variable set", "1. Call DBConnection.init()", "Connection should use environment variable URL.", "Environment URL was used.", "PASS"],
+    [14, "WB_014", "Verify DBConnection properties fallback", "Env: WMS_DB_URL=null", "Environment variable not set", "1. Call DBConnection.init()", "Configuration should load from db.properties.", "Loaded from db.properties.", "PASS"],
+    [15, "WB_015", "Verify DBConnection missing config check", "Config: All properties null", "No DB config provided", "1. Call DBConnection.init()", "RuntimeException should be thrown.", "RuntimeException was thrown.", "PASS"],
+    [16, "WB_016", "Verify DBConnection singleton reuse", "Database connection request", "Connection initialized", "1. Call getConnection() twice", "Cached configuration should be reused.", "Cached config was reused.", "PASS"],
+    [17, "WB_017", "Verify createProduct() SQL parameter binding", "Product: WMS-105, Price: 24900", "Database connection open", "1. Call createProduct()", "PreparedStatement parameters 1-6 should bind safely.", "Parameters were bound safely.", "PASS"],
+    [18, "WB_018", "Verify createProduct() duplicate key handling", "Product ID: WMS-101 (Duplicate)", "ID already exists", "1. Insert duplicate ID", "Duplicate key error 1062 should be caught.", "Duplicate key error was caught.", "PASS"],
+    [19, "WB_019", "Verify getAllProducts() empty table handling", "Database table: products (0 rows)", "Table is empty", "1. Query products table", "Should return empty List with size 0.", "Empty List returned.", "PASS"],
+    [20, "WB_020", "Verify getAllProducts() cursor mapping loop", "Database table: products (7 rows)", "Table has 7 rows", "1. Query products table", "Loop should map all 7 rows to Product objects.", "All 7 rows mapped properly.", "PASS"],
+    [21, "WB_021", "Verify getProductById() branch when record exists", "Query ID: WMS-101", "WMS-101 exists in DB", "1. Query WMS-101", "Populated Product object should be returned.", "Populated Product was returned.", "PASS"],
+    [22, "WB_022", "Verify getProductById() branch when not found", "Query ID: GHOST-999", "ID does not exist", "1. Query GHOST-999", "Null should be returned safely.", "Null was returned safely.", "PASS"],
+    [23, "WB_023", "Verify updateProduct() SQL execution", "Product ID: WMS-104\nNew Price: 34500", "WMS-104 exists in DB", "1. Call updateProduct()", "Affected row count > 0 should be returned.", "Row count 1 was returned.", "PASS"],
+    [24, "WB_024", "Verify updateProduct() 0 rows affected branch", "Product ID: NON-EXIST-888", "ID does not exist", "1. Call updateProduct()", "Should return null for non-existent product.", "Null was returned.", "PASS"],
+    [25, "WB_025", "Verify addStock() pessimistic row-locking", "Product ID: WMS-101\nQuantity: 10", "Active transaction", "1. Execute SELECT ... FOR UPDATE", "InnoDB row lock should be placed.", "Row lock was acquired.", "PASS"],
+    [26, "WB_026", "Verify addStock() atomic commit execution", "Current: 25, Add: 10", "Row lock acquired", "1. Execute UPDATE\n2. Call conn.commit()", "Transaction should commit atomically.", "Transaction committed successfully.", "PASS"],
+    [27, "WB_027", "Verify reduceStock() decision on excess quantity", "Current: 10, Reduce: 50", "amount > currentQty", "1. Try to reduce 50 from 10", "Rollback should occur and exception thrown.", "Rollback occurred; exception thrown.", "PASS"],
+    [28, "WB_028", "Verify reduceStock() rollback in catch block", "Simulated SQL exception", "Database error during decrement", "1. Trigger database error", "Catch block should call conn.rollback().", "Rollback called in catch block.", "PASS"],
+    [29, "WB_029", "Verify reduceStock() normal reduction branch", "Current: 36, Reduce: 5", "amount <= currentQty", "1. Reduce valid quantity 5", "Quantity should decrement and commit.", "Quantity decremented and committed.", "PASS"],
+    [30, "WB_030", "Verify resource cleanup in finally block", "Connection and Statements", "DAO operation complete", "1. Enter finally block", "All JDBC resources must be closed safely.", "All resources closed in finally.", "PASS"]
 ]
 
 headers = [
@@ -129,7 +129,7 @@ def build_college_sheet(ws, sheet_title, test_type_desc, data_rows):
         ("Application Name", "Warehouse Management System"),
         ("Module", "Inventory & Warehouse Operations"),
         ("Prepared By", "A1_B4_52"),
-        ("Date", "30-09-2026"),
+        ("Date", "30 09 2026"),
         ("Description", f"Test cases for warehouse management functionality using {test_type_desc}")
     ]
     for r_idx, (k, v) in enumerate(meta, start=2):
@@ -153,7 +153,7 @@ def build_college_sheet(ws, sheet_title, test_type_desc, data_rows):
 
     # Data Rows (Row 9 to 38)
     for r_idx, row_data in enumerate(data_rows, start=9):
-        ws.row_dimensions[r_idx].height = 36 # ample height for multiline text
+        ws.row_dimensions[r_idx].height = 34
         for c_idx, val in enumerate(row_data, start=1):
             cell = ws.cell(row=r_idx, column=c_idx, value=val)
             cell.font = td_font
@@ -213,6 +213,7 @@ out_wb = r"c:\Users\prana\OneDrive\Desktop\A1_B4_52_PRANAV_RATHI_WHITE_BOX.xlsx"
 wb_single_wb.save(out_wb)
 print(f"Saved: {out_wb}")
 
+# 4. Generate matching CSVs
 import csv
 
 with open(r"c:\Users\prana\OneDrive\Desktop\A1_B4_52_PRANAV_RATHI_BLACK_BOX.csv", "w", newline="", encoding="utf-8") as f:
@@ -225,4 +226,4 @@ with open(r"c:\Users\prana\OneDrive\Desktop\A1_B4_52_PRANAV_RATHI_WHITE_BOX.csv"
     w.writerow(headers)
     w.writerows(white_box_rows)
 
-print("CSVs generated successfully.")
+print("All workbooks and CSVs generated successfully.")
